@@ -1,0 +1,63 @@
+/*
+ * Copyright (C) 2024 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "storePassword": "0000001A06B9D59FA3E3A67F7F0121CB87563A37BFC1AB9EB64B87D5D7476D5C4A41EF47CFB4C2B691DF",
+          "certpath": "D:/HAP_CODE/acts_validator/signature/app-release.cer",
+          "keyAlias": "ohos-app",
+          "keyPassword": "0000001A096414986938DB3A93DCD954DD76D0B4DDE681C2D4EA14D53F730590C8668181786F92364DDE",
+          "profile": "D:/HAP_CODE/acts_validator/signature/app-release-profile.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "D:/HAP_CODE/acts_validator/signature/app.p12"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileSdkVersion": 12,
+        "compatibleSdkVersion": 9,
+        "runtimeOS": "OpenHarmony"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
