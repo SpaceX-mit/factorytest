@@ -19,6 +19,7 @@ import xml from '@ohos.xml';
 import fs from '@ohos.file.fs';
 import util from '@ohos.util';
 import data_preferences from '@ohos.data.preferences';
+import { FactorytestData } from '../../utils/FactorytestData';
 
 const TAG: string = 'ParseXML';
 let path: string = globalThis.dir;
@@ -48,12 +49,17 @@ struct IndexPage {
   @State Url: string = '';
   private TestCaseList: TestCase[] = [
     { title: 'CameraPreviewFormat', title_ch: '相机预览测试', uri: 'pages/Camera/CameraPreviewFormat' },
-    /*{ title: 'CameraPhotoFormat', title_ch: '相机拍照测试', uri: 'pages/Camera/CameraPhotoFormat' },
-    { title: 'CameraFlash', title_ch: '闪光灯测试', uri: 'pages/Camera/CameraFlash' },*/
+    { title: 'CameraPhotoFormat', title_ch: '相机拍照测试', uri: 'pages/Camera/CameraPhotoFormat' },
+    { title: 'CameraFlash', title_ch: '闪光灯测试', uri: 'pages/Camera/CameraFlash' },
   ]
   @State ColorObject: Object[] = letColor;
   @State ColorTrue: number[] = [];
   @State ColorTrue2: number[] = [];
+
+  async aboutToAppear() {
+    FactorytestData.loadConfigs();
+    console.error('bububu get =' + FactorytestData.getConfig().Camera_menu);
+  }
 
   async onPageShow() {
     let Test : data_preferences.Preferences | number = 0;
@@ -270,25 +276,27 @@ struct IndexPage {
 
       List({}) {
         ForEach(this.TestCaseList, (item: TestCase, index) => {
-          ListItem() {
-            Row() {
-              Text(item.title_ch).fontSize(20).fontColor(Color.White)
-            }
-            .width('100%')
-            .height(50)
-            .alignItems(VerticalAlign.Center)
-            .linearGradient(this.count === 0 && this.TEST === 0 ? {
-              angle: 90,
-              colors: [[0x000000, 0.0], [0x000000, 1.0]]
-            } : { angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
-            .onClick(() => {
-              this.count = 1;
-              this.ClearAll = false;
-              this.current = index;
-              router.push({
-                url: item.uri,
+          if(FactorytestData.getConfig().Camera_menu.includes(index)) {
+            ListItem() {
+              Row() {
+                Text(item.title_ch).fontSize(20).fontColor(Color.White)
+              }
+              .width('100%')
+              .height(50)
+              .alignItems(VerticalAlign.Center)
+              .linearGradient(this.count === 0 && this.TEST === 0 ? {
+                angle: 90,
+                colors: [[0x000000, 0.0], [0x000000, 1.0]]
+              } : { angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
+              .onClick(() => {
+                this.count = 1;
+                this.ClearAll = false;
+                this.current = index;
+                router.push({
+                  url: item.uri,
+                })
               })
-            })
+            }
           }
         }, (item: TestCase) => item.title)
       }

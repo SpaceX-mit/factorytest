@@ -18,6 +18,7 @@ import xml from '@ohos.xml';
 import fs from '@ohos.file.fs';
 import util from '@ohos.util';
 import data_preferences from '@ohos.data.preferences';
+import { FactorytestData } from '../../utils/FactorytestData';
 // import common from '@ohos.app.ability.common';
 
 const TAG: string = 'ParseXML';
@@ -48,48 +49,52 @@ struct IndexPage {
   @State Url: string = '';
   private TestCaseList: TestCase[] = [
     { title: 'ScrollingList', title_ch: '菜单滑动测试', uri: 'pages/ArkUI/ScrollListTest' },
-    /*{ title: 'TouchMove', uri: 'pages/ArkUI/TouchMoveTest' },*/
     { title: 'PinchGesture', title_ch: '手动缩放测试', uri: 'pages/ArkUI/PinchGestureTest' },
-    /*{ title: 'RotationGesture', uri: 'pages/ArkUI/RotationGestureTest' },
-    { title: 'SwipeGesture', uri: 'pages/ArkUI/SwipeGestureTest' },
-    { title: 'LongPressGesture', uri: 'pages/ArkUI/LongPressGesture' },
-    { title: 'TapGesture', uri: 'pages/ArkUI/TapGesture' },
-    { title: 'PanGesture', uri: 'pages/ArkUI/PanGesture' },*/
+    { title: 'RotationGesture', title_ch: '待补充', uri: 'pages/ArkUI/RotationGestureTest' },
+    { title: 'SwipeGesture', title_ch: '待补充', uri: 'pages/ArkUI/SwipeGestureTest' },
+    { title: 'LongPressGesture', title_ch: '待补充', uri: 'pages/ArkUI/LongPressGesture' },
+    { title: 'TapGesture', title_ch: '待补充', uri: 'pages/ArkUI/TapGesture' },
+    { title: 'PanGesture', title_ch: '待补充', uri: 'pages/ArkUI/PanGesture' },
     { title: 'CanvasFillStyle', title_ch: '填充测试', uri: 'pages/ArkUI/CanvasFillStyle' },
     { title: 'CanvasLineWidth', title_ch: '线框测试', uri: 'pages/ArkUI/CanvasLineWidth' },
-    /*{ title: 'CanvasStrokeStyle', uri: 'pages/ArkUI/CanvasStrokeStyle' },
-    { title: 'CanvasLineCap', uri: 'pages/ArkUI/CanvasLineCap' },
-    { title: 'CanvasLineJoin', uri: 'pages/ArkUI/CanvasLineJoin' },
-    { title: 'CanvasFont', uri: 'pages/ArkUI/CanvasFont' },
-    { title: 'CanvasTextAlign', uri: 'pages/ArkUI/CanvasTextAlign' },
-    { title: 'CanvasTextBaseline', uri: 'pages/ArkUI/CanvasTextBaseline' },*/
+    { title: 'CanvasStrokeStyle', title_ch: '待补充', uri: 'pages/ArkUI/CanvasStrokeStyle' },
+    { title: 'CanvasLineCap', title_ch: '待补充', uri: 'pages/ArkUI/CanvasLineCap' },
+    { title: 'CanvasLineJoin', title_ch: '待补充', uri: 'pages/ArkUI/CanvasLineJoin' },
+    { title: 'CanvasFont', title_ch: '待补充', uri: 'pages/ArkUI/CanvasFont' },
+    { title: 'CanvasTextAlign', title_ch: '待补充', uri: 'pages/ArkUI/CanvasTextAlign' },
+    { title: 'CanvasTextBaseline', title_ch: '待补充', uri: 'pages/ArkUI/CanvasTextBaseline' },
     { title: 'CanvasGlobalAlpha', title_ch: '透明度测试', uri: 'pages/ArkUI/CanvasGlobalAlpha' },
-    /*{ title: 'CanvasLineDashOffset', uri: 'pages/ArkUI/CanvasLineDashOffset' },
-    { title: 'CanvasGlobalCompositeOperation', uri: 'pages/ArkUI/CanvasGlobalCompositeOperation' },*/
+    { title: 'CanvasLineDashOffset', title_ch: '待补充', uri: 'pages/ArkUI/CanvasLineDashOffset' },
+    { title: 'CanvasGlobalCompositeOperation', title_ch: '待补充', uri: 'pages/ArkUI/CanvasGlobalCompositeOperation' },
     { title: 'CanvasShadowBlur', title_ch: '阴影测试', uri: 'pages/ArkUI/CanvasShadowBlur' },
-    /*{ title: 'CanvasShadowColor', uri: 'pages/ArkUI/CanvasShadowColor' },
-    { title: 'CanvasShadowOffsetX', uri: 'pages/ArkUI/CanvasShadowOffsetX' },
-    { title: 'CanvasShadowOffsetY', uri: 'pages/ArkUI/CanvasShadowOffsetY' },
-    { title: 'DatePickerDialog', uri: 'pages/ArkUI/DatePickerDialog' },
-    { title: 'Marquee', uri: 'pages/ArkUI/Marquee' },
-    { title: 'PatternLock', uri: 'pages/ArkUI/PatternLock' },
-    { title: 'TextPicker', uri: 'pages/ArkUI/TextPicker' },
-    { title: 'TimePicker', uri: 'pages/ArkUI/TimePicker' },
-    { title: 'TimePickerDialog', uri: 'pages/ArkUI/TimePickerDialog' },*/
+    { title: 'CanvasShadowColor', title_ch: '待补充', uri: 'pages/ArkUI/CanvasShadowColor' },
+    { title: 'CanvasShadowOffsetX', title_ch: '待补充', uri: 'pages/ArkUI/CanvasShadowOffsetX' },
+    { title: 'CanvasShadowOffsetY', title_ch: '待补充', uri: 'pages/ArkUI/CanvasShadowOffsetY' },
+    { title: 'DatePickerDialog', title_ch: '待补充', uri: 'pages/ArkUI/DatePickerDialog' },
+    { title: 'Marquee', title_ch: '待补充', uri: 'pages/ArkUI/Marquee' },
+    { title: 'PatternLock', title_ch: '待补充', uri: 'pages/ArkUI/PatternLock' },
+    { title: 'TextPicker', title_ch: '待补充', uri: 'pages/ArkUI/TextPicker' },
+    { title: 'TimePicker', title_ch: '待补充', uri: 'pages/ArkUI/TimePicker' },
+    { title: 'TimePickerDialog', title_ch: '待补充', uri: 'pages/ArkUI/TimePickerDialog' },
     { title: 'Progress', title_ch: '进度条测试', uri: 'pages/ArkUI/Progress' },
-    /*{ title: 'Rating', uri: 'pages/ArkUI/Rating' },
-    { title: 'Search', uri: 'pages/ArkUI/Search' },
-    { title: 'SharedTransition', uri: 'pages/ArkUI/SharedTransition' },
-    { title: 'Swiper', uri: 'pages/ArkUI/Swiper' },
-    { title: 'Gauge', uri: 'pages/ArkUI/Gauge' },
-    { title: 'ImageAnimator', uri: 'pages/ArkUI/ImageAnimator' },
-    { title: 'TextPickerDialog', uri: 'pages/ArkUI/TextPickerDialog' },
-    { title: 'Refresh', uri: 'pages/ArkUI/Refresh' },
-    { title: 'onAccessibilityHover', uri: 'pages/ArkUI/AccessBilityHover' }*/
+    { title: 'Rating', title_ch: '待补充', uri: 'pages/ArkUI/Rating' },
+    { title: 'Search', title_ch: '待补充', uri: 'pages/ArkUI/Search' },
+    { title: 'SharedTransition', title_ch: '待补充', uri: 'pages/ArkUI/SharedTransition' },
+    { title: 'Swiper', title_ch: '待补充', uri: 'pages/ArkUI/Swiper' },
+    { title: 'Gauge', title_ch: '待补充', uri: 'pages/ArkUI/Gauge' },
+    { title: 'ImageAnimator', title_ch: '待补充', uri: 'pages/ArkUI/ImageAnimator' },
+    { title: 'TextPickerDialog', title_ch: '待补充', uri: 'pages/ArkUI/TextPickerDialog' },
+    { title: 'Refresh', title_ch: '待补充', uri: 'pages/ArkUI/Refresh' },
+    { title: 'onAccessibilityHover', title_ch: '待补充', uri: 'pages/ArkUI/AccessBilityHover' },
   ]
   @State ColorObject: Object[] = letColor;
   @State ColorTrue: number[] = [];
   @State ColorTrue2: number[] = [];
+
+  async aboutToAppear() {
+    FactorytestData.loadConfigs();
+    console.error('bububu get =' + FactorytestData.getConfig().ArkUI_menu);
+  }
 
   async onPageShow() {
     let Test : data_preferences.Preferences | number = 0;
@@ -307,27 +312,29 @@ struct IndexPage {
 
       List({}) {
         ForEach(this.TestCaseList, (item: TestCase, index) => {
-          ListItem() {
-            Row() {
-              Text(item.title_ch)
-                .fontSize(20)
-                .fontColor(Color.White)
-            }
-            .width('100%')
-            .height(50)
-            .alignItems(VerticalAlign.Center)
-            .linearGradient(this.count === 0 && this.TEST === 0 ? {
-              angle: 90,
-              colors: [[0x000000, 0.0], [0x000000, 1.0]]
-            } : { angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
-            .onClick(() => {
-              this.count = 1;
-              this.ClearAll = false;
-              this.current = index;
-              router.push({
-                url: item.uri,
+          if(FactorytestData.getConfig().ArkUI_menu.includes(index)) {
+            ListItem() {
+              Row() {
+                Text(item.title_ch)
+                  .fontSize(20)
+                  .fontColor(Color.White)
+              }
+              .width('100%')
+              .height(50)
+              .alignItems(VerticalAlign.Center)
+              .linearGradient(this.count === 0 && this.TEST === 0 ? {
+                angle: 90,
+                colors: [[0x000000, 0.0], [0x000000, 1.0]]
+              } : { angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
+              .onClick(() => {
+                this.count = 1;
+                this.ClearAll = false;
+                this.current = index;
+                router.push({
+                  url: item.uri,
+                })
               })
-            })
+            }
           }
         }, (item: TestCase) => item.title)
       }

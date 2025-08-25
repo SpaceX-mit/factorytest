@@ -5,12 +5,32 @@ const filePath = '/system/etc/factorytest_config.json';
 
 export interface ConfigData {
   first_menu: number[];
+  ArkUI_menu: number[];
+  Audio_menu: number[];
+  Camera_menu: number[];
+  Player_menu: number[];
+  Sensor_menu: number[];
+  Screen_menu: number[];
+  MultimodalInput_menu: number[];
+  Power_menu: number[];
+  Wifi_menu: number[];
+  Interface_menu: number[];
 }
 
 export class FactorytestData {
   private static ins: FactorytestData;
   public configData: ConfigData = {
     first_menu: [0,1,2,3,4,5,6,7,8,9,10,11,12,13],
+    ArkUI_menu: [0,1,7,8,15,18,28],
+    Audio_menu: [0,2],
+    Camera_menu: [0],
+    Player_menu: [0,1],
+    Sensor_menu: [0,1,3,4,5,12],
+    Screen_menu: [1,3],
+    MultimodalInput_menu: [0,1,2],
+    Power_menu: [0,1],
+    Wifi_menu: [0],
+    Interface_menu: [0,1,2,3],
   };
 
   private constructor() {

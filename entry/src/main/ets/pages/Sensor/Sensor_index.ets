@@ -20,6 +20,7 @@ import fs from '@ohos.file.fs';
 import util from '@ohos.util';
 import data_preferences from '@ohos.data.preferences';
 import FlushData from '../model/FlushData';
+import { FactorytestData } from '../../utils/FactorytestData';
 
 const TAG: string = 'ParseXML';
 let path: string = globalThis.dir;
@@ -53,23 +54,28 @@ struct IndexPage {
   private TestCaseList: TestCase[] = [
     { title: 'SensorAccelerometer', title_ch: '加速度传感器测试', uri: 'pages/Sensor/SensorAccelerometer' },
     { title: 'AccelerometerUncalibrated', title_ch: '加速度传感器（未校准）测试', uri: 'pages/Sensor/AccelerometerUncalibrated' },
-    /*{ title: 'Barometer', title_ch: '气压传感器测试', uri: 'pages/Sensor/Barometer' },*/
+    { title: 'Barometer', title_ch: '气压传感器测试', uri: 'pages/Sensor/Barometer' },
     { title: 'Gravity', title_ch: '重力传感器测试', uri: 'pages/Sensor/Gravity' },
     { title: 'Gyroscope', title_ch: '陀螺仪测试', uri: 'pages/Sensor/Gyroscope' },
     { title: 'GyroscopeUncalibrated', title_ch: '陀螺仪（未校准）测试', uri: 'pages/Sensor/GyroscopeUncalibrated' },
-    /*{ title: 'HeartRate', title_ch: '心率传感器测试', uri: 'pages/Sensor/HeartRate' },
-    { title: 'Humidity', title_ch: '湿度传感器测试', uri: 'pages/Sensor/Humidity' },*/
-    /*{ title: 'Light', title_ch: '光感测试', uri: 'pages/Sensor/Light' },*/
-    /*{ title: 'LinearAccelerometer', title_ch: '线性加速度传感器测试', uri: 'pages/Sensor/LinearAccelerometer' },
+    { title: 'HeartRate', title_ch: '心率传感器测试', uri: 'pages/Sensor/HeartRate' },
+    { title: 'Humidity', title_ch: '湿度传感器测试', uri: 'pages/Sensor/Humidity' },
+    { title: 'Light', title_ch: '光感测试', uri: 'pages/Sensor/Light' },
+    { title: 'LinearAccelerometer', title_ch: '线性加速度传感器测试', uri: 'pages/Sensor/LinearAccelerometer' },
     { title: 'Orientation', title_ch: '方向传感器测试', uri: 'pages/Sensor/Orientation' },
-    { title: 'Pedometer', title_ch: '计步传感器测试', uri: 'pages/Sensor/Pedometer' },*/
+    { title: 'Pedometer', title_ch: '计步传感器测试', uri: 'pages/Sensor/Pedometer' },
     { title: 'Proximity', title_ch: '接近光感器测试', uri: 'pages/Sensor/Proximity' },
-    /*{ title: 'SignificantMotion', title_ch: '动作检测传感器测试', uri: 'pages/Sensor/SignificantMotion' },
-    { title: 'Temperature', title_ch: '温度传感器测试', uri: 'pages/Sensor/Temperature' }*/
+    { title: 'SignificantMotion', title_ch: '动作检测传感器测试', uri: 'pages/Sensor/SignificantMotion' },
+    { title: 'Temperature', title_ch: '温度传感器测试', uri: 'pages/Sensor/Temperature' },
   ]
   @State ColorObject: Object[] = letColor;
   @State ColorTrue: number[] = [];
   @State ColorTrue2: number[] = [];
+
+  async aboutToAppear() {
+    FactorytestData.loadConfigs();
+    console.error('bububu get =' + FactorytestData.getConfig().Sensor_menu);
+  }
 
   async onPageShow() {
     let Test : data_preferences.Preferences | number = 0;
@@ -285,30 +291,32 @@ struct IndexPage {
 
       List({}) {
         ForEach(this.TestCaseList, (item: TestCase, index) => {
-          ListItem() {
-            Row() {
-              Text(item.title_ch)
-                .fontSize(20)
-                .fontColor(Color.White)
-            }
-            .width('100%')
-            .height(50)
-            .alignItems(VerticalAlign.Center)
-            .linearGradient(this.count === 0 && this.TEST === 0 ? {
-              angle: 90,
-              colors: [[0x000000, 0.0], [0x000000, 1.0]]
-            } : {
-              angle: 90,
-              colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]]
-            })
-            .onClick(() => {
-              this.count = 1;
-              this.ClearAll = false;
-              this.current = index;
-              router.push({
-                url: item.uri,
+          if(FactorytestData.getConfig().Sensor_menu.includes(index)) {
+            ListItem() {
+              Row() {
+                Text(item.title_ch)
+                  .fontSize(20)
+                  .fontColor(Color.White)
+              }
+              .width('100%')
+              .height(50)
+              .alignItems(VerticalAlign.Center)
+              .linearGradient(this.count === 0 && this.TEST === 0 ? {
+                angle: 90,
+                colors: [[0x000000, 0.0], [0x000000, 1.0]]
+              } : {
+                angle: 90,
+                colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]]
               })
-            })
+              .onClick(() => {
+                this.count = 1;
+                this.ClearAll = false;
+                this.current = index;
+                router.push({
+                  url: item.uri,
+                })
+              })
+            }
           }
         }, (item: TestCase) => item.title)
       }
