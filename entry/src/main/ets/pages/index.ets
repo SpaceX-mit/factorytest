@@ -20,6 +20,7 @@ import util from '@ohos.util';
 import DateTimeUtil from './model/DateTimeUtil';
 import data_preferences from '@ohos.data.preferences';
 import FlushData from '../pages/model/FlushData';
+import { FactorytestData } from '../utils/FactorytestData';
 
 const TAG = 'ParseXML';
 let path : string = globalThis.dir;
@@ -109,15 +110,15 @@ struct IndexPage {
     { title: 'Audio', title_ch: '音频测试', uri: 'pages/Audio/Audio_index' },
     { title: 'Camera', title_ch: '相机测试', uri: 'pages/Camera/Camera_index' },
     { title: 'Player', title_ch: '播放测试', uri: 'pages/Player/Player_index' },
-    /*{ title: 'Experience', title_ch: '体验测试', uri: 'pages/Experience/Experience_index' },*/
+    { title: 'Experience', title_ch: '体验测试', uri: 'pages/Experience/Experience_index' },
     { title: 'Sensor', title_ch: '传感器测试', uri: 'pages/Sensor/Sensor_index' },
     { title: 'Screen', title_ch: '屏幕测试', uri: 'pages/Screen/Screen_index' },
     { title: 'MultimodalInput', title_ch: '输入测试', uri: 'pages/MultimodalInput/MultimodalInput_index' },
     { title: 'Power', title_ch: '电源测试', uri: 'pages/Power/Power_index' },
-    /*{ title: 'Notification', title_ch: '通知测试', uri: 'pages/Notification/Notification_index' },*/
-    { title: 'Wifi', title_ch: 'Wifi测试', uri: 'pages/Wifi/Wifi_index' },/*
+    { title: 'Notification', title_ch: '通知测试', uri: 'pages/Notification/Notification_index' },
+    { title: 'Wifi', title_ch: 'Wifi测试', uri: 'pages/Wifi/Wifi_index' },
     { title: 'Bluetooth', title_ch: '蓝牙测试', uri: 'pages/Bluetooth/BlueTooth_index' },
-    { title: 'PCS', title_ch: 'PCS测试', uri: 'pages/PCS/PCS_index' }*/
+    { title: 'PCS', title_ch: 'PCS测试', uri: 'pages/PCS/PCS_index' },
     { title: 'Interface', title_ch: '接口测试', uri: 'pages/Interface/Interface_index' },
   ]
 
@@ -132,6 +133,11 @@ struct IndexPage {
   @State name: string = 'Player';
   @State Vue: boolean = false;
   @State Url: string = '';
+
+  async aboutToAppear() {
+    FactorytestData.loadConfigs();
+    console.error('bububu get =' + FactorytestData.getConfig().first_menu);
+  }
 
   async onPageShow() {
     let Test : data_preferences.Preferences | number = 0;
@@ -367,29 +373,32 @@ struct IndexPage {
 
       List({}) {
         ForEach(this.TestCaseList, (item: TestCase, index: number) => {
-          ListItem() {
-            Row() {
-              Text(item.title_ch).fontSize(20).fontColor(Color.White)
-            }
-            .width('100%')
-            .height(50)
-            .alignItems(VerticalAlign.Center)
-            .linearGradient({ angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
-            .onClick(() => {
-              this.count = 1;
-              this.current = index;
-              router.pushUrl({
-                url: item.uri,
+          if(FactorytestData.getConfig().first_menu.includes(index)) {
+            ListItem() {
+              Row() {
+                Text(item.title_ch).fontSize(20).fontColor(Color.White)
+              }
+              .width('100%')
+              .height(50)
+              .alignItems(VerticalAlign.Center)
+              .linearGradient({ angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
+              .onClick(() => {
+                this.count = 1;
+                this.current = index;
+                router.pushUrl({
+                  url: item.uri,
+                })
+                let dateTimeUtil = new DateTimeUtil();
+                let time =
+                  `${dateTimeUtil.getFullYear()}-${dateTimeUtil.getMonth()}-${dateTimeUtil.getDay()} ${dateTimeUtil.getHour()}:${dateTimeUtil.getMinute()}:${dateTimeUtil.getSecond()}`;
+                let TimePath = path + "/Time.txt";
+                let OP = fs.openSync(TimePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+                let buf = new ArrayBuffer(4096);
+                fs.readSync(OP.fd, buf);
+                let Log = (time + ";").toString();
+                fs.writeSync(OP.fd, Log);
               })
-              let dateTimeUtil = new DateTimeUtil();
-              let time = `${dateTimeUtil.getFullYear()}-${dateTimeUtil.getMonth()}-${dateTimeUtil.getDay()} ${dateTimeUtil.getHour()}:${dateTimeUtil.getMinute()}:${dateTimeUtil.getSecond()}`;
-              let TimePath = path + "/Time.txt";
-              let OP = fs.openSync(TimePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-              let buf = new ArrayBuffer(4096);
-              fs.readSync(OP.fd, buf);
-              let Log = (time + ";").toString();
-              fs.writeSync(OP.fd, Log);
-            })
+            }
           }
         }, (item: TestCase) => item.title)
       }.width('100%').height('85%').divider({ strokeWidth: 1, color: Color.Grey })
