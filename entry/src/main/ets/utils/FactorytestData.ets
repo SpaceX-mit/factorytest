@@ -15,6 +15,7 @@ export interface ConfigData {
   Power_menu: number[];
   Wifi_menu: number[];
   Interface_menu: number[];
+  _comment: string[];
 }
 
 export class FactorytestData {
@@ -31,6 +32,7 @@ export class FactorytestData {
     Power_menu: [0,1],
     Wifi_menu: [0],
     Interface_menu: [0,1,2,3],
+    _comment: ['用于注释'],
   };
 
   private constructor() {
@@ -49,7 +51,7 @@ export class FactorytestData {
     try {
       let file = fs.openSync(filePath, fs.OpenMode.READ_ONLY);
       console.error('bububububu 1');
-      let buff = new ArrayBuffer(1024);
+      let buff = new ArrayBuffer(8192);
       console.error('bububububu 2');
       const content = fs.readSync(file.fd, buff);
       console.error('bububububu 3');
