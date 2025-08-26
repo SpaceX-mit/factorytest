@@ -33,8 +33,8 @@
         "description": "$string:MainAbility_desc",
         "icon": "$media:image",
         "label": "$string:MainAbility_label",
-        "startWindowIcon": "$media:image",
-        "startWindowBackground": "$color:white",
+        "startWindowIcon": "$media:spacemit_logo",
+        "startWindowBackground": "$color:black",
         "exported": true,
         "skills": [
           {

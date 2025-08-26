@@ -18,6 +18,20 @@ export interface ConfigData {
   _comment: string[];
 }
 
+export interface ResultData {
+  final_result: number[];
+  ArkUI_result: number[];
+  Audio_result: number[];
+  Camera_result: number[];
+  Player_result: number[];
+  Sensor_result: number[];
+  Screen_result: number[];
+  MultimodalInput_result: number[];
+  Power_result: number[];
+  Wifi_result: number[];
+  Interface_result: number[];
+}
+
 export class FactorytestData {
   private static ins: FactorytestData;
   public configData: ConfigData = {
@@ -33,6 +47,20 @@ export class FactorytestData {
     Wifi_menu: [0],
     Interface_menu: [0,1,2,3],
     _comment: ['用于注释'],
+  };
+
+  public resultData: ResultData = {
+    final_result: [0,0],
+    ArkUI_result: [0,0],
+    Audio_result: [0,0],
+    Camera_result: [0,0],
+    Player_result: [0,0],
+    Sensor_result: [0,0],
+    Screen_result: [0,0],
+    MultimodalInput_result: [0,0],
+    Power_result: [0,0],
+    Wifi_result: [0,0],
+    Interface_result: [0,0],
   };
 
   private constructor() {
@@ -72,5 +100,9 @@ export class FactorytestData {
 
   public static getConfig(): ConfigData {
     return FactorytestData.getInstance().configData;
+  }
+
+  public static getResult(): ResultData {
+    return FactorytestData.getInstance().resultData;
   }
 }
