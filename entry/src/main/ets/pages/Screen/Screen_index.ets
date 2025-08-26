@@ -171,7 +171,7 @@ struct IndexPage {
       }
     }
 
-    if(temp === this.TestCaseList.length) {
+    if(temp === FactorytestData.getConfig().Screen_menu.length/*this.TestCaseList.length*/) {
       console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh')
       this.Vue = true;
     }

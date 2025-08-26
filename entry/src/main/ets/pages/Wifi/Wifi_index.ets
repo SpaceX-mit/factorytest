@@ -167,7 +167,7 @@ struct Wifi_index {
       }
     }
 
-    if(temp === this.TestCaseList.length) {
+    if(temp === FactorytestData.getConfig().Wifi_menu.length/*this.TestCaseList.length*/) {
       console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh')
       this.Vue = true;
     }

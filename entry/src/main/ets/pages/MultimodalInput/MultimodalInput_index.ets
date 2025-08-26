@@ -166,7 +166,7 @@ struct MultimodalInputPage {
       }
     }
 
-    if(temp === this.TestCaseList.length) {
+    if(temp === FactorytestData.getConfig().MultimodalInput_menu.length/*this.TestCaseList.length*/) {
       console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh')
       this.Vue = true;
     }

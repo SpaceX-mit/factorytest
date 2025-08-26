@@ -180,7 +180,7 @@ struct IndexPage {
     }
     console.error('xxxxxxxxxxxxxxxx ohoh temp=' + temp)
     console.error('xxxxxxxxxxxxxxxx ohoh list=' + this.TestCaseList.length)
-    if(temp === this.TestCaseList.length) {
+    if(temp === FactorytestData.getConfig().Player_menu.length/*this.TestCaseList.length*/) {
       console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh')
       this.Vue = true;
     }
