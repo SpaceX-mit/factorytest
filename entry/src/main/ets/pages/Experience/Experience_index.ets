@@ -341,8 +341,8 @@ struct IndexPage {
       serializer.setDeclaration();
       serializer.startElement("testsuite");
       serializer.setAttributes("name", "ActsExperienceTest");
-      serializer.setAttributes("time", "*");
-      serializer.setAttributes("errors", "0");
+      //serializer.setAttributes("time", "*");
+      //serializer.setAttributes("errors", "0");
       serializer.setAttributes("disabled", "0");
       serializer.setAttributes("failures", failNum);
       serializer.setAttributes("ignored", "0");
@@ -352,12 +352,11 @@ struct IndexPage {
       for (let i = 0; i < title.length; i++) {
         serializer.startElement("testcase");
         serializer.setAttributes("name", String(title[i]));
-        serializer.setAttributes("status", "run");
-        serializer.setAttributes("time", "*");
-        serializer.setAttributes("classname", "ActsExperienceTest");
+        //serializer.setAttributes("time", "*");
+        //serializer.setAttributes("classname", "ActsExperienceTest");
         serializer.setAttributes("result", String(result[i]));
-        serializer.setAttributes("level", "*");
-        serializer.setAttributes("message", "*");
+        //serializer.setAttributes("level", "*");
+        //serializer.setAttributes("message", "*");
         serializer.endElement();
       }
       serializer.endElement();

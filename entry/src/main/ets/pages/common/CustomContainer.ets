@@ -46,8 +46,8 @@ export struct CustomContainer {
     else {
       Button({ stateEffect: this.Vue }) {
         Image($r('app.media.ic_public_pass'))
-          .width('40vp')
-          .height('40vp')
+          .width('20vp')
+          .height('20vp')
       }
       .width('30%')
       .height('60vp')

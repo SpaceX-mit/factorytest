@@ -338,8 +338,8 @@ struct PCSPage {
       serializer.setDeclaration();
       serializer.startElement("testsuite");
       serializer.setAttributes("name", "ActsPCSTest");
-      serializer.setAttributes("time", "*");
-      serializer.setAttributes("errors", "0");
+      //serializer.setAttributes("time", "*");
+      //serializer.setAttributes("errors", "0");
       serializer.setAttributes("disabled", "0");
       serializer.setAttributes("failures", failNum);
       serializer.setAttributes("ignored", "0");
@@ -349,12 +349,11 @@ struct PCSPage {
       for (let i = 0; i < title.length; i++) {
         serializer.startElement("testcase");
         serializer.setAttributes("name", String(title[i]));
-        serializer.setAttributes("status", "run");
-        serializer.setAttributes("time", "*");
-        serializer.setAttributes("classname", "ActsPCSTest");
+        //serializer.setAttributes("time", "*");
+        //serializer.setAttributes("classname", "ActsPCSTest");
         serializer.setAttributes("result", String(result[i]));
-        serializer.setAttributes("level", "*");
-        serializer.setAttributes("message", "*");
+        //serializer.setAttributes("level", "*");
+        //serializer.setAttributes("message", "*");
         serializer.endElement();
       }
       serializer.endElement();
