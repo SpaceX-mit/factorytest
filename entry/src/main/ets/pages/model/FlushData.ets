@@ -424,4 +424,29 @@ export default class FlushData {
       console.info("Succeeded in flushing.");
     });
   }
+
+  static ResetAging = async () => {
+    let Test : data_preferences.Preferences;
+    let context : Context | null= null;
+    context = globalThis.getContext();
+    let preferences: ESObject;
+
+    let promise = data_preferences.getPreferences(context, 'mystore');
+    await promise.then((object) => {
+      preferences = object;
+    });
+    promise = preferences.get('Aging', 0);
+    await promise.then((data) => {
+      Test = data;
+      console.info("Succeeded in getting value of 'Aging'. Data: " + data);
+    });
+    promise = preferences.put('Aging', 0);
+    promise.then(() => {
+      console.info("Succeeded in putting value of 'Aging'.");
+    });
+    promise = preferences.flush();
+    promise.then(() => {
+      console.info("Succeeded in flushing.");
+    });
+  }
 }

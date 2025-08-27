@@ -38,6 +38,7 @@ let path1_2 = path + '/Wifi';
 let path1_3 = path + '/Bluetooth';
 let path1_4 = path + '/PCS';
 let path1_5 = path + '/Interface';
+let path1_6 = path + '/Aging';
 let picturePath = path + '/screenshot';
 let ExperienceDataPath = path + '/ExperienceData';
 let VarColor: Object[] = [];
@@ -55,6 +56,7 @@ let WifiColorBackPath = path + '/WifiColorBack.txt'; // wifi管理
 let BluetoothColorBackPath = path + '/BluetoothColorBack.txt'; // bluetooth管理
 let PCSColorBackPath = path + '/PCSColorBack.txt'; // PCS自动化
 let InterfaceColorBackPath = path + '/InterfaceColorBack.txt'; // Interface测试
+let AgingColorBackPath = path + '/AgingColorBack.txt'; // 老化测试
 let PlayerNetWorkColorBackPath = path4 + '/PlayerNetWorkColorBack.txt'; // 播放网络视频
 let PlayerAudioColorBackPath = path4 + '/PlayerAudioColorBack.txt';
 let PlayerVideoColorBackPath = path4 + '/PlayerVideoColorBack.txt';
@@ -74,6 +76,7 @@ fs.openSync(WifiColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 fs.openSync(BluetoothColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 fs.openSync(PCSColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 fs.openSync(InterfaceColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+fs.openSync(AgingColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 let TimePath = path + '/Time.txt';
 fs.openSync(TimePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 let xmlPath = path + '/Test.xml';
@@ -95,6 +98,7 @@ let pathWifi = path1_2 + '/WifiReport.txt';
 let pathBluetooth = path1_3 + '/BluetoothReport.txt';
 let pathPCS = path1_4 + '/PCSReport.txt';
 let pathInterface = path1_5 + '/InterfaceReport.txt';
+let pathAging = path1_6 + '/AgingReport.txt';
 
 class TestCase {
   title: string = '';
@@ -120,6 +124,7 @@ struct IndexPage {
     { title: 'Bluetooth', title_ch: '蓝牙测试', uri: 'pages/Bluetooth/BlueTooth_index' },
     { title: 'PCS', title_ch: 'PCS测试', uri: 'pages/PCS/PCS_index' },
     { title: 'Interface', title_ch: '接口测试', uri: 'pages/Interface/Interface_index' },
+    { title: 'Aging', title_ch: '老化测试', uri: 'pages/Aging/Aging_index' },
   ]
 
   private current: number = 0;
@@ -178,6 +183,8 @@ struct IndexPage {
       fs.mkdirSync(path1_4);
       // Interface
       fs.mkdirSync(path1_5);
+      // Aging
+      fs.mkdirSync(path1_6);
       fs.mkdirSync(picturePath);
       fs.mkdirSync(ExperienceDataPath);
       promise = preferences.put('index', 1);
@@ -218,6 +225,7 @@ struct IndexPage {
     fs.openSync(pathBluetooth, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(pathPCS, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(pathInterface, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+    fs.openSync(pathAging, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
 
     let opt = fs.openSync(ColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     let buff = new ArrayBuffer(40960);
@@ -425,6 +433,7 @@ struct IndexPage {
     fs.unlinkSync(pathBluetooth);
     fs.unlinkSync(pathPCS);
     fs.unlinkSync(pathInterface);
+    fs.unlinkSync(pathAging);
     fs.unlinkSync(ColorBackPath);
     fs.unlinkSync(ArkUIColorBackPath);
     fs.unlinkSync(AudioColorBackPath);
@@ -443,6 +452,7 @@ struct IndexPage {
     fs.unlinkSync(BluetoothColorBackPath);
     fs.unlinkSync(PCSColorBackPath);
     fs.unlinkSync(InterfaceColorBackPath);
+    fs.unlinkSync(AgingColorBackPath);
     fs.rmdirSync(picturePath);
     fs.mkdirSync(picturePath);
     fs.rmdirSync(ExperienceDataPath);
@@ -466,6 +476,7 @@ struct IndexPage {
     fs.openSync(pathBluetooth, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(pathPCS, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(pathInterface, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+    fs.openSync(pathAging, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(ColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(ArkUIColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(AudioColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
@@ -484,6 +495,7 @@ struct IndexPage {
     fs.openSync(BluetoothColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(PCSColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     fs.openSync(InterfaceColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+    fs.openSync(AgingColorBackPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     FlushData.ResetArkUI();
     FlushData.ResetAudio();
     FlushData.ResetCamera();
@@ -500,6 +512,7 @@ struct IndexPage {
     FlushData.ResetBluetooth();
     FlushData.ResetPCS();
     FlushData.ResetInterface();
+    FlushData.ResetAging();
   }
 
   SaveXml() {
@@ -528,6 +541,7 @@ struct IndexPage {
     let BluetoothReport: string; // bluetooth管理
     let PCSReport: string; // PCS
     let InterfaceReport: string; // Interface
+    let AgingReport: string; // Aging
     /*
      * ArkUI
      */
@@ -730,15 +744,29 @@ struct IndexPage {
     let title15: string[] = [];
     let result15: string[] = [];
     for (let i = 0; i < Math.floor(str15.length / 2); i++) {
-      title15[i] = str14[i * 2];
-      result15[i] = str14[i * 2 + 1];
+      title15[i] = str15[i * 2];
+      result15[i] = str15[i * 2 + 1];
     }
 
+    /**
+     * Aging
+     */
+    let OP16 = fs.openSync(pathAging, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+    let buf16 = new ArrayBuffer(40960);
+    fs.readSync(OP14.fd, buf14);
+    AgingReport = String.fromCharCode(...new Uint8Array(buf14));
+    let str16 = AgingReport.split(";");
+    let title16: string[] = [];
+    let result16: string[] = [];
+    for (let i = 0; i < Math.floor(str14.length / 2); i++) {
+      title16[i] = str16[i * 2];
+      result16[i] = str16[i * 2 + 1];
+    }
 
     let report = ArkUIReport + AudioReport + CameraReport + PlayerReport +
       ExperienceReport + SensorReport + ScreenReport + MultimodalInputReport
       + PowerReport + NotificationReport + BluetoothReport + WifiReport + PCSReport
-      + InterfaceReport;
+      + InterfaceReport + AgingReport;
     let FailIndex = report.indexOf('false');
     let FailNum = 0;
     while (FailIndex != -1) {
@@ -1045,6 +1073,27 @@ struct IndexPage {
     }
     let InterfaceTestNum = InterfaceFailNum + InterfacePassNum;
     let interfaceTestNum = (InterfaceTestNum).toString();
+
+    /**
+     * Aging
+     */
+    let AgingFailIndex = AgingReport.indexOf('false');
+    let AgingFailNum = 0;
+    while (AgingFailIndex != -1) {
+      console.log(AgingFailIndex.toString());
+      AgingFailNum++;
+      AgingFailIndex = AgingReport.indexOf('false', AgingFailIndex + 1);
+    }
+    let agingFailNum = (AgingFailNum).toString();
+    let AgingPassIndex = AgingReport.indexOf('true ');
+    let AgingPassNum = 0;
+    while (AgingPassIndex != -1) {
+      console.log(AgingPassIndex.toString());
+      AgingPassNum++;
+      AgingPassIndex = AgingReport.indexOf('true ', AgingPassIndex + 1);
+    }
+    let AgingTestNum = AgingFailNum + AgingPassNum;
+    let agingTestNum = (AgingTestNum).toString();
 
     let arrayBuffer = new ArrayBuffer(40960);
     let bufView = new DataView(arrayBuffer);
@@ -1402,6 +1451,31 @@ struct IndexPage {
       serializer.setAttributes("name", String(title14[i]));
       //serializer.setAttributes("time", "*");
       //serializer.setAttributes("classname", "ActsInterfaceTest");
+      serializer.setAttributes("result", String(result14[i]));
+      //serializer.setAttributes("level", "*");
+      //serializer.setAttributes("message", "*");
+      serializer.endElement();
+    }
+    serializer.endElement();
+
+    /**
+     * Aging
+     */
+    serializer.startElement("testsuite");
+    serializer.setAttributes("name", "ActsAgingTest");
+    //serializer.setAttributes("time", "*");
+    //serializer.setAttributes("errors", "0");
+    //serializer.setAttributes("disabled", "0");
+    serializer.setAttributes("failures", agingFailNum);
+    //serializer.setAttributes("ignored", "0");
+    serializer.setAttributes("tests", agingTestNum);
+    //serializer.setAttributes("message", "*");
+    //serializer.setAttributes("modulename", "ActsValidator");
+    for (let i = 0; i < title14.length; i++) {
+      serializer.startElement("testcase");
+      serializer.setAttributes("name", String(title14[i]));
+      //serializer.setAttributes("time", "*");
+      //serializer.setAttributes("classname", "ActsAgingTest");
       serializer.setAttributes("result", String(result14[i]));
       //serializer.setAttributes("level", "*");
       //serializer.setAttributes("message", "*");

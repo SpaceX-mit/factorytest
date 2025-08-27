@@ -113,7 +113,9 @@
     "pages/Interface/Usb",
     "pages/Interface/Gmac",
     "pages/Interface/Tfcard",
-    "pages/Interface/Vibrator"
+    "pages/Interface/Vibrator",
+    "pages/Aging/Aging_index",
+    "pages/Aging/Normal"
   ]
 }
 
