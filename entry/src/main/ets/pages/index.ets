@@ -21,6 +21,8 @@ import DateTimeUtil from './model/DateTimeUtil';
 import data_preferences from '@ohos.data.preferences';
 import FlushData from '../pages/model/FlushData';
 import { FactorytestData } from '../utils/FactorytestData';
+import systemParameter from '@ohos.systemparameter';
+import power from '@ohos.power';
 
 const TAG = 'ParseXML';
 let path : string = globalThis.dir;
@@ -142,6 +144,11 @@ struct IndexPage {
   async aboutToAppear() {
     FactorytestData.loadConfigs();
     console.error('bububu get =' + FactorytestData.getConfig().first_menu);
+    if (systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
+      router.push({
+        url: 'pages/Aging/Reboot'
+      })
+    }
   }
 
   async onPageShow() {

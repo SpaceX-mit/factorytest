@@ -179,6 +179,11 @@
         "name": "ohos.permission.VIBRATE",
         "reason": "$string:permission_reason",
         "usedScene": {}
+      },
+      {
+        "name": "ohos.permission.REBOOT",
+        "reason": "$string:permission_reason",
+        "usedScene": {}
       }
     ]
   }

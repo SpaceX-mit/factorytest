@@ -31,6 +31,7 @@ struct playVideo {
   @State isAutoPlay: boolean = true;
   @State showControls: boolean = true;
   controller: VideoController = new VideoController();
+  controller1: VideoController = new VideoController();
 
   async aboutToAppear() {
     //await FirstDialog.ChooseDialog(this.StepTips, this.name);
@@ -57,6 +58,23 @@ struct playVideo {
         Video({
           src: $rawfile(this.videoSrc),
           controller: this.controller
+        })
+          .width('100%')
+          .height('60%')
+          .loop(true)
+          .autoPlay(this.isAutoPlay)
+          .controls(this.showControls)
+          .onFinish(() => {
+            this.Vue = true;
+          })
+      }.width('100%').height('38%').onClick(() => {
+        this.showControls = !this.showControls
+      })
+
+      Flex({ alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
+        Video({
+          src: $rawfile(this.videoSrc),
+          controller: this.controller1
         })
           .width('100%')
           .height('60%')

@@ -115,7 +115,8 @@
     "pages/Interface/Tfcard",
     "pages/Interface/Vibrator",
     "pages/Aging/Aging_index",
-    "pages/Aging/Normal"
+    "pages/Aging/Normal",
+    "pages/Aging/Reboot"
   ]
 }
 
