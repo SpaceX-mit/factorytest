@@ -46,17 +46,17 @@ export default class MainAbility extends Ability {
     onWindowStageCreate(windowStage) {
 
         console.log("[Demo] MainAbility onWindowStageCreate")
-        /*let AtManager = abilityAccessCtrl.createAtManager();
+        let AtManager = abilityAccessCtrl.createAtManager();
 
-        AtManager.requestPermissionsFromUser(this.context,["ohos.permission.READ_MEDIA", "ohos.permission.WRITE_MEDIA",
-          "ohos.permission.CAPTURE_SCREEN", "ohos.permission.INTERNET", "ohos.permission.CAMERA",
-          "ohos.permission.MICROPHONE", "ohos.permission.START_INVISIBLE_ABILITY",
+        AtManager.requestPermissionsFromUser(this.context,[/*"ohos.permission.READ_MEDIA", "ohos.permission.WRITE_MEDIA",
+          "ohos.permission.CAPTURE_SCREEN", "ohos.permission.INTERNET", "ohos.permission.CAMERA",*/
+          "ohos.permission.MICROPHONE"/*, "ohos.permission.START_INVISIBLE_ABILITY",
           "ohos.permission.SYSTEM_FLOAT_WINDOW", "ohos.permission.GET_BUNDLE_INFO_PRIVILEGED",
           "ohos.permission.GET_INSTALLED_BUNDLE_LIST",
           "ohos.permission.MEDIA_LOCATION","ohos.permission.WRITE_IMAGEVIDEO","ohos.permission.READ_IMAGEVIDEO","ohos.permission.LOCATION"
           , "ohos.permission.APPROXIMATELY_LOCATION",'ohos.permission.USE_BLUETOOTH','ohos.permission.DISCOVER_BLUETOOTH',
-          'ohos.permission.MANAGE_BLUETOOTH',"ohos.permission.ACCESS_BLUETOOTH","ohos.permission.ACTIVITY_MOTION"]).then(() => {})
-          try {
+          'ohos.permission.MANAGE_BLUETOOTH',"ohos.permission.ACCESS_BLUETOOTH","ohos.permission.ACTIVITY_MOTION"*/]).then(() => {})
+          /*try {
             notification.requestEnableNotification((err: Base.BusinessError) => {
               if (err) {
                 console.error(`requestEnableNotification failed, code is ${err.code}, message is ${err.message}`);

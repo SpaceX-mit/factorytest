@@ -78,7 +78,9 @@
       {
         "name": "ohos.permission.MICROPHONE",
         "reason": "$string:permission_reason",
-        "usedScene": {}
+        "usedScene": {
+          "when": "always"
+        }
       },
       {
         "name": "ohos.permission.START_INVISIBLE_ABILITY"
@@ -184,6 +186,20 @@
         "name": "ohos.permission.REBOOT",
         "reason": "$string:permission_reason",
         "usedScene": {}
+      },
+      {
+        "name": "ohos.permission.READ_AUDIO",
+        "reason": "$string:permission_reason",
+        "usedScene": {
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.WRITE_AUDIO",
+        "reason": "$string:permission_reason",
+        "usedScene": {
+          "when": "always"
+        }
       }
     ]
   }
