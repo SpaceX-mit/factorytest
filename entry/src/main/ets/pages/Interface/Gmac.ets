@@ -30,7 +30,7 @@ struct Gmac {
   @State FillColor: string = '#FF000000';
   @State name: string = 'Gmac';
   @State StepTips: string = '测试目的：用于测试本机能否连接以太网\n-先插入网线\n-进入测试应用\n-看能否识别以太网卡'
-    + '\n-预期结果：检测到以太网卡';
+    + '\n-预期结果：检测到以太网卡\n注意：进入该测试界面后插入网线，需要点击刷新';
   private tag: string = 'Gmac';
   @State Vue: boolean = false;
   @State isSensor: boolean = true;

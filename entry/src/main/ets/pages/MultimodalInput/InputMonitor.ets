@@ -30,7 +30,7 @@ struct InputMonitor {
   @State FillColor: string = '#FF000000';
   @State X: number = 0;
   @State name: string = 'InputMonitor';
-  @State StepTips: string = '操作步骤：请插入外接鼠标\n按顺序点击四个按钮' + '\n' + '预期结果：识别鼠标点击按钮都变成绿色，则通过';
+  @State StepTips: string = '操作步骤：按顺序点击四个按钮' + '\n' + '预期结果：识别点击的按钮都变成绿色，则通过';
   @State Vue: boolean = false;
   @State text: string = '';
   @State btnOne: boolean = false;
@@ -136,7 +136,7 @@ struct InputMonitor {
   build() {
     Column() {
       CustomContainerClick({
-        title: this.name,
+        title: '输入监控测试',
         Url: 'pages/MultimodalInput/MultimodalInput_index',
         StepTips: this.StepTips,
         FillColor: $FillColor,

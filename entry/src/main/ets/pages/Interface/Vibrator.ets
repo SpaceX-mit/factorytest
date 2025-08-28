@@ -29,8 +29,8 @@ import vibrator from '@ohos.vibrator';
 struct Tfcard {
   @State FillColor: string = '#FF000000';
   @State name: string = 'Vibrator';
-  @State StepTips: string = '测试目的：用于测试本机震动马达是否正常工作\n-点击开启震动马达\n-是否震动\n-点击关闭震动马达'
-    + '\n-预期结果：震动马达能够震动，并能够正常关闭';
+  @State StepTips: string = '测试目的：用于测试本机震动马达是否正常工作\n-点击开启震动马达，观察是否有震动\n-点击关闭震动马达，观察震动是否停止'
+    + '\n-预期结果：打开震动马达能够震动，并能够正常关闭';
   private tag: string = 'Vibrator';
   @State Vue: boolean = false;
   @State isSensor: boolean = true;
@@ -87,7 +87,7 @@ struct Tfcard {
       Blank().height(10)
 
       Column() {
-        Text('测试目的:\n设备的震动马达是否能够正常工作\n测试步骤：\n1. 点击开启震动马达, 观察是否有震动发生\n2. 点击关闭震动马达,观察震动是否停止\n3. 如果设备没有震动马达，点击设备无震动马达')
+        Text('测试目的:\n设备的震动马达是否能够正常工作\n测试步骤：\n1. 点击开启震动马达，观察是否有震动发生\n2. 点击关闭震动马达，观察震动是否停止\n3. 如果设备没有震动马达，点击设备无震动马达')
           .fontColor(Color.White)
           .fontSize('18fp')
 

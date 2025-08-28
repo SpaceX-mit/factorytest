@@ -29,7 +29,7 @@ struct Tfcard {
   @State FillColor: string = '#FF000000';
   @State name: string = 'Tfcard';
   @State StepTips: string = '测试目的：用于测试本机能否检测TF卡\n-先插入TF卡\n-进入测试应用\n-看能否识别到TF卡'
-    + '\n-预期结果：检测到TF卡，显示TF卡名称';
+    + '\n-预期结果：检测到TF卡，显示TF卡名称\n注意：进入该测试界面后插入TF卡，需要点击刷新';
   private tag: string = 'Tfcard';
   @State Vue: boolean = false;
   @State isSensor: boolean = true;

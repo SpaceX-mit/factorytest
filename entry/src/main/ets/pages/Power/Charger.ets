@@ -28,8 +28,8 @@ import batteryInfo from '@ohos.batteryInfo';
 struct Charger {
   @State FillColor: string = '#FF000000';
   @State name: string = 'Charger';
-  @State StepTips: string = '测试目的：用于测试本机能否正常充电\n-插入适配器\n-进入测试应用\n-看是否正常充电'
-    + '\n-预期结果：设备正常充电，正常显示电量';
+  @State StepTips: string = '测试目的：用于测试本机能否正常充电\n-插入适配器\n-进入测试应用\n-看是否正常充电\n-检测结果绿色为通过'
+    + '\n-预期结果：设备正常充电，正常显示电量\n注意：进入该界面后才插入适配器，请点击刷新';
   private tag: string = 'Charger';
   @State Vue: boolean = false;
   @State isSensor: boolean = true;

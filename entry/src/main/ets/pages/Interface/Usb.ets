@@ -28,7 +28,7 @@ struct Usb {
   @State FillColor: string = '#FF000000';
   @State name: string = 'Usb';
   @State StepTips: string = '测试目的：用于测试本机是否能检测USB设备\n-插入U盘\n-进入测试应用\n-看能否识别到USB设备'
-    + '\n-预期结果：检测到USB设备';
+    + '\n-预期结果：检测到USB设备\n注意：进入该测试界面后插入U盘，需要点击刷新';
   private tag: string = 'Usb';
   @State Vue: boolean = false;
   @State isSensor: boolean = true;
