@@ -83,7 +83,9 @@ export default class MainAbility extends Ability {
             //win.setPreferredOrientation(windowStage.Orientation.LANDSCAPE); //LANDSCAPE ,LANDSCAPE_INVERTED ,PORTRAIT,PORTRAIT_INVERTED
             win.setWindowSystemBarProperties({
                  statusBarColor: '#FF000000',
-                 navigationBarColor: '#FF000000'
+                 statusBarContentColor: '#FFFFFFFF',
+                 navigationBarColor: '#FF000000',
+                 navigationBarContentColor: '#FFFFFFFF',
             }).then((): void => {
             });
 

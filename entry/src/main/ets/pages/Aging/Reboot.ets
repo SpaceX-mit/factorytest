@@ -38,7 +38,7 @@ struct Reboot {
   @State checkInfo: string = '！！';
   @State tfName: string = 'none';
   @State tfVolume: string = 'none';
-  @State timeLeft: number = 30;
+  @State timeLeft: number = 15;
   private intervalId: number | null = null
 
   async aboutToAppear() {
@@ -122,7 +122,13 @@ struct Reboot {
             try {
               systemParameter.setSync('persist.factorytest.reboottest.enabled', '1');
               if(systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
-                power.rebootDevice("reboot_reason");
+                this.intervalId = setInterval(() => {
+                  if (this.timeLeft > 0) {
+                    this.timeLeft--
+                  } else {
+                    power.rebootDevice("reboot_reason");
+                  }
+                }, 1000)
               }
             } catch (err) {
               console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh error 2');
