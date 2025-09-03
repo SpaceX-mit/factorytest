@@ -90,7 +90,7 @@ struct cameraOrientation {
           })
         })
 
-        Text(this.name)
+        Text('闪光灯测试')
           .fontColor(Color.White)
           .fontSize('18fp')
           .margin({ left: '-20vp' })
@@ -102,6 +102,13 @@ struct cameraOrientation {
       .height('10%')
       .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
+
+      Blank().height(20)
+      Line()
+        .width('100%')
+        .height(3)
+        .backgroundColor('#FFFFFF')
+      Blank().height(20)
 
       Stack() {
         XComponent({
@@ -142,7 +149,7 @@ struct cameraOrientation {
         .scrollBarWidth(10)
       }
       .width('80%')
-      .height('50%')
+      .height('45%')
 
 
       CustomContainer({
