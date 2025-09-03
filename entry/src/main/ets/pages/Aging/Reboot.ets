@@ -77,7 +77,7 @@ struct Reboot {
         .size({ width: '40vp', height: '60vp' })
         .onClick(() => {
           router.back({
-            url: 'pages/Interface/Interface_index',
+            url: 'pages/Aging/Aging_index',
             params: { result: 'None' }
           })
         })
