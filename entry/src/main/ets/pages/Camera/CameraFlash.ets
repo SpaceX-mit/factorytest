@@ -118,7 +118,7 @@ struct cameraOrientation {
         })
           .onLoad(async () => {
             Logger.info(this.tag, 'onLoad is called')
-            this.cameraInit()
+            //this.cameraInit()
           })
         Row()
           .backgroundColor(Color.Black)
@@ -137,9 +137,13 @@ struct cameraOrientation {
               Button(this.flashChange ? '关闭' : '开启').onClick(() => {
                 this.openFlash()
               })
+                .enabled(this.isFlash)
+                .backgroundColor(this.isFlash ? '#1677ff' : '#cccccc')
               Button('无闪光灯').onClick(() => {
                 this.Vue = true
               })
+                .enabled(this.isFlash)
+                .backgroundColor(this.isFlash ? '#1677ff' : '#cccccc')
             }
             .justifyContent(FlexAlign.SpaceEvenly)
             .width('100%')

@@ -140,7 +140,7 @@ struct playVideo {
           })
             .onLoad(async () => {
               this.surfaceId = Number(this.mXComponentController.getXComponentSurfaceId());
-              this.cameraInit()
+              //this.cameraInit()
             })
             .size({ width: '100%', height: '60%' })
         }.width('50%').height('38%')

@@ -196,7 +196,7 @@ struct cameraFormat {
                   Logger.info(this.tag, 'onLoad is called')
                   this.surfaceId = Number(this.mXComponentController.getXComponentSurfaceId());
                   Logger.info(this.tag, `onLoad surfaceId: ${this.surfaceId}`)
-                  this.cameraInit()
+                  //this.cameraInit()
                 })
                 .size({ width: '100%', height: '70%' })
               Text('预览').fontSize('20fp').fontColor(Color.White)
