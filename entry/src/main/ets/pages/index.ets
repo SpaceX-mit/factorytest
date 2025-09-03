@@ -23,6 +23,7 @@ import FlushData from '../pages/model/FlushData';
 import { FactorytestData } from '../utils/FactorytestData';
 import systemParameter from '@ohos.systemparameter';
 import power from '@ohos.power';
+import Updater from '@ohos.update';
 
 const TAG = 'ParseXML';
 let path : string = globalThis.dir;
@@ -416,7 +417,44 @@ struct IndexPage {
             }
           }
         }, (item: TestCase) => item.title)
-      }.width('100%').height('85%').divider({ strokeWidth: 1, color: Color.Grey })
+      }.width('100%').height('75%').divider({ strokeWidth: 1, color: Color.Grey })
+
+      Blank().height(20)
+
+      Button('全部测试完成后，恢复出厂设置')
+        .width('400vp')
+        .height('60vp')
+        .backgroundColor(Color.Red)
+        .onClick(() => {
+          AlertDialog.show({
+            title: '操作确认',
+            message: '确定执行此操作吗？\n警告：\n执行该操作后，所有测试数据将会被清除',
+            primaryButton: {
+              value: '取消',
+              action: () => {}
+            },
+            secondaryButton: {
+              value: '确认',
+              action: () => {
+                let restorer = Updater.getRestorer();
+                if (!restorer) {
+                  console.error('Updater getRestorer failed');
+                }
+                try {
+                  restorer.factoryReset()
+                    .then(() => {
+                      console.error('factoryReset success');
+                    })
+                    .catch((err: Error) => {
+                      console.error('factoryReset failed: ' + JSON.stringify(err));
+                    })
+                } catch(err) {
+                  console.error('Updater factoryReset failed: ' + JSON.stringify(err));
+                }
+              }
+            }
+          })
+      })
     }.width('100%').height('100%').backgroundColor(Color.Black)
   }
 

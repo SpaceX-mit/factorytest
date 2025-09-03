@@ -200,6 +200,11 @@
         "usedScene": {
           "when": "always"
         }
+      },
+      {
+        "name": "ohos.permission.FACTORY_RESET",
+        "reason": "$string:permission_reason",
+        "usedScene": {}
       }
     ]
   }
