@@ -89,6 +89,8 @@ export default class MainAbility extends Ability {
             }).then((): void => {
             });
 
+            win.setWindowKeepScreenOn(true);
+
             //globalThis.mainWindow = data;
         });
     }
