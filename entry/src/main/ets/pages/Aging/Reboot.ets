@@ -24,6 +24,7 @@ import fs from '@ohos.file.fs';
 import display from '@ohos.display';
 import systemParameter from '@ohos.systemparameter';
 import power from '@ohos.power';
+import { FactorytestData } from '../../utils/FactorytestData';
 
 @Entry
 @Component
@@ -38,27 +39,42 @@ struct Reboot {
   @State checkInfo: string = '！！';
   @State tfName: string = 'none';
   @State tfVolume: string = 'none';
+  @State info: string = '未测试';
   @State timeLeft: number = 15;
   private intervalId: number | null = null
+  private reboot_times: number = 1000;
+  private current_times: number = 0;
 
   async aboutToAppear() {
     //await FirstDialog.ChooseDialog(this.StepTips, this.name)
+    FactorytestData.loadConfigs();
+    this.reboot_times = FactorytestData.getConfig().reboot_times;
+    if (systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
+      let currentValue = systemParameter.getSync('persist.factorytest.rebootnum');
+      this.current_times = parseInt(currentValue) + 1;
+
+      if(this.current_times < this.reboot_times) {
+        this.info = '测试中... 勿动！！'
+        let newValue = this.current_times;
+        systemParameter.setSync('persist.factorytest.rebootnum', newValue.toString());
+
+        this.intervalId = setInterval(() => {
+          if (this.timeLeft > 0) {
+            this.timeLeft--
+          } else {
+            power.rebootDevice("reboot_reason");
+          }
+        }, 1000)
+      } else {
+        this.info = '恭喜你！测试通过！！'
+        systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
+        systemParameter.setSync('persist.factorytest.rebootnum', '0');
+        this.Vue = true;
+      }
+    }
   }
 
   onPageShow() {
-    if (systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
-      let currentValue = systemParameter.getSync('persist.factorytest.rebootnum');
-      let newValue = parseInt(currentValue) + 1;
-      systemParameter.setSync('persist.factorytest.rebootnum', newValue.toString());
-
-      this.intervalId = setInterval(() => {
-        if (this.timeLeft > 0) {
-          this.timeLeft--
-        } else {
-          power.rebootDevice("reboot_reason");
-        }
-      }, 1000)
-    }
   }
 
   onPageHide() {
@@ -109,10 +125,44 @@ struct Reboot {
 
         Blank()
 
-        Text(this.timeLeft.toString())
-          .fontSize(50)
-          .fontColor(Color.Red)
+        Row() {
+          Text('总测试次数：')
+            .fontSize(40)
+            .fontColor(Color.White)
 
+          Text(this.reboot_times.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text('当前测试次数：')
+            .fontSize(40)
+            .fontColor(Color.White)
+
+          Text(this.current_times.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text('倒计时：')
+            .fontSize(40)
+            .fontColor(Color.White)
+
+          Text(this.timeLeft.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text(this.info)
+            .fontSize(60)
+            .fontColor(this.Vue? Color.Green:Color.Red)
+        }
         Blank()
 
         Button('开始测试')
@@ -120,6 +170,9 @@ struct Reboot {
           .height('60vp')
           .onClick(() => {
             try {
+              this.info = '测试中 ... 勿动 ！！！'
+              this.current_times = 0
+              this.Vue = false
               systemParameter.setSync('persist.factorytest.reboottest.enabled', '1');
               if(systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
                 this.intervalId = setInterval(() => {
@@ -133,7 +186,7 @@ struct Reboot {
             } catch (err) {
               console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh error 2');
             }
-            this.Vue = true;
+            //this.Vue = true;
           })
 
         Blank()
@@ -142,8 +195,10 @@ struct Reboot {
           .width('40%')
           .height('60vp')
           .onClick(() => {
+            this.info = '你停止了测试！！'
             systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
-            this.Vue = true;
+            clearInterval(this.intervalId);
+            //this.Vue = true;
           })
 
         Blank()

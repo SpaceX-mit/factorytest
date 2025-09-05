@@ -16,6 +16,7 @@ export interface ConfigData {
   Wifi_menu: number[];
   Interface_menu: number[];
   Aging_menu: number[];
+  reboot_times: number;
   _comment: string[];
 }
 
@@ -48,6 +49,7 @@ export class FactorytestData {
     Wifi_menu: [0],
     Interface_menu: [0,1,2,3],
     Aging_menu: [0],
+    reboot_times: 1000,
     _comment: ['用于注释'],
   };
 
