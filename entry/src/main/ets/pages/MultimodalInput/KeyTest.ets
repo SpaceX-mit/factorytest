@@ -116,7 +116,7 @@ struct Key {
         .size({ width: '40vp', height: '60vp' })
         .onClick(() => {
           router.back({
-            url: 'pages/Interface/Interface_index',
+            url: 'pages/MultimodalInput/MultimodalInput_index',
             params: { result: 'None' }
           })
         })
