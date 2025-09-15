@@ -417,7 +417,7 @@ struct IndexPage {
             }
           }
         }, (item: TestCase) => item.title)
-      }.width('100%').height('75%').divider({ strokeWidth: 1, color: Color.Grey })
+      }.width('100%').height('70%').divider({ strokeWidth: 1, color: Color.Grey })
 
       Blank().height(20)
 

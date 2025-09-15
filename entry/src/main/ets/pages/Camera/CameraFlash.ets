@@ -153,7 +153,7 @@ struct cameraOrientation {
         .scrollBarWidth(10)
       }
       .width('80%')
-      .height('45%')
+      .height('40%')
 
 
       CustomContainer({
