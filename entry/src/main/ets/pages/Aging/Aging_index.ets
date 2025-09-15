@@ -54,6 +54,7 @@ struct IndexPage {
   private TestCaseList: TestCase[] = [
     { title: 'Normal', title_ch: '综合老化测试', uri: 'pages/Aging/Normal' },
     { title: 'Reboot', title_ch: '重启老化测试', uri: 'pages/Aging/Reboot' },
+    { title: 'Standby', title_ch: '休眠唤醒老化测试', uri: 'pages/Aging/Standby' },
   ]
   @State ColorObject: Object[] = letColor;
   @State ColorTrue: number[] = [];

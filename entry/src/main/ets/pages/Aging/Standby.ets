@@ -1,0 +1,284 @@
+/*
+* Copyright (c) 2023 Hunan OpenValley Digital Industry Development Co., Ltd.
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+import Logger from '../model/Logger'
+import { CustomContainer } from '../common/CameraFlashContainer';
+import FirstDialog from '../model/FirstDialog';
+import router from '@ohos.router';
+import sensor from '@ohos.sensor';
+import BusinessError from "@ohos.base";
+import volumeManager from '@ohos.file.volumeManager';
+import fs from '@ohos.file.fs';
+import display from '@ohos.display';
+import systemParameter from '@ohos.systemparameter';
+import power from '@ohos.power';
+import { FactorytestData } from '../../utils/FactorytestData';
+import process from '@ohos.process';
+import commonEvent from "@ohos.commonEvent";
+import commonEventManager from '@ohos.commonEventManager';
+
+@Entry
+@Component
+struct Reboot {
+  @State FillColor: string = '#FF000000';
+  @State name: string = 'Standby';
+  @State StepTips: string = '测试目的：休眠唤醒老化测试\n-点击开启测试\n-是否能够多次休眠唤醒\n-测试完成后无异常'
+    + '\n-预期结果：多次休眠唤醒后无异常';
+  private tag: string = 'Standby';
+  @State Vue: boolean = false;
+  @State isSensor: boolean = true;
+  @State checkInfo: string = '！！';
+  @State tfName: string = 'none';
+  @State tfVolume: string = 'none';
+  @State info: string = '未测试';
+  @State timeLeft: number = 15;
+  private intervalId: number | null = null
+  private reboot_times: number = 1000;
+  private current_times: number = 0;
+  private subscriber: commonEventManager.CommonEventSubscriber | null = null
+
+  subscribeScreenOnEvent() {
+    const subscribeInfo: commonEventManager.CommonEventSubscribeInfo = {
+      events: ['usual.event.SCREEN_ON'] // 事件类型
+    };
+
+    commonEventManager.createSubscriber(subscribeInfo, (err, commonEventSubscriber) => {
+      if (err) {
+        console.error(`Failed to create subscriber. Code: ${err.code}, message: ${err.message}`);
+        return;
+      }
+      this.subscriber = commonEventSubscriber;
+      console.info('Succeeded in creating subscriber.');
+
+      // 开始订阅事件
+      commonEventManager.subscribe(this.subscriber, (err, data) => {
+        if (err) {
+          console.error(`Failed to subscribe. Code: ${err.code}, message: ${err.message}`);
+          return;
+        }
+        console.info('Screen turned on. Execute your action here.');
+        // 在此处执行亮屏后的自定义逻辑
+        this.startSuspend();
+      });
+    });
+  }
+
+  unsubscribeScreenOnEvent() {
+    if (this.subscriber) {
+      commonEventManager.unsubscribe(this.subscriber, (err) => {
+        if (err) {
+          console.error(`Failed to unsubscribe. Code: ${err.code}, message: ${err.message}`);
+          return;
+        }
+        console.info('Succeeded in unsubscribing.');
+        this.subscriber = null;
+      });
+    }
+  }
+
+  async startSuspend() {
+    let child: process.ChildProcess | undefined = undefined;
+    try {
+      console.error("fucfucccccccccc");
+      child = process.runCmd('echo +20 > /sys/class/rtc/rtc0/wakealarm');
+      console.error("fucfucccccccccc1");
+      let childResult = child.wait();
+      childResult.then(val => {
+        console.error('++++++++++++++++++++ runCmd result =' + val);
+      })
+
+      child = process.runCmd('power-shell suspend');
+      childResult = child.wait();
+      childResult.then(val => {
+        console.error('++++++++++++++++++++ runCmd result =' + val);
+      })
+      console.error("fucfucccccccccc2");
+    } catch (err) {
+      console.error('fuc no +++++++++++++++++++++++++');
+    }
+
+  }
+
+  async aboutToAppear() {
+    //await FirstDialog.ChooseDialog(this.StepTips, this.name)
+    FactorytestData.loadConfigs();
+    this.reboot_times = FactorytestData.getConfig().reboot_times;
+    if (systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
+      let currentValue = systemParameter.getSync('persist.factorytest.rebootnum');
+      this.current_times = parseInt(currentValue) + 1;
+
+      if(this.current_times < this.reboot_times) {
+        this.info = '测试中... 勿动！！'
+        let newValue = this.current_times;
+        systemParameter.setSync('persist.factorytest.rebootnum', newValue.toString());
+
+        this.intervalId = setInterval(() => {
+          if (this.timeLeft > 0) {
+            this.timeLeft--
+          } else {
+            power.rebootDevice("reboot_reason");
+          }
+        }, 1000)
+      } else {
+        this.info = '恭喜你！测试通过！！'
+        systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
+        systemParameter.setSync('persist.factorytest.rebootnum', '0');
+        this.Vue = true;
+      }
+    }
+
+    this.subscribeScreenOnEvent();
+  }
+
+  onPageShow() {
+  }
+
+  onPageHide() {
+    this.unsubscribeScreenOnEvent();
+  }
+
+  build() {
+    Column() {
+      Row() {
+        Button() {
+          Image($r('app.media.ic_public_back'))
+            .width('20vp')
+            .height('18vp')
+            .margin({ left: '20vp' })
+        }
+        .backgroundColor(Color.Black)
+        .size({ width: '40vp', height: '60vp' })
+        .onClick(() => {
+          router.back({
+            url: 'pages/Aging/Aging_index',
+            params: { result: 'None' }
+          })
+        })
+
+        Text("休眠唤醒老化测试")
+          .fontColor(Color.White)
+          .fontSize('18fp')
+          .margin({ left: '-20vp' })
+        Text('hello')
+          .fontColor(Color.White)
+          .visibility(Visibility.Hidden)
+      }
+      .backgroundColor(Color.Black)
+      .height('10%')
+      .width('100%')
+      .justifyContent(FlexAlign.SpaceBetween)
+
+      Blank().height(20)
+      Line()
+        .width('100%')
+        .height(3)
+        .backgroundColor('#FFFFFF')
+      Blank().height(10)
+
+      Column() {
+        Text('测试目的：休眠唤醒老化测试\n-点击开启测试\n-是否能够多次休眠唤醒\n-休眠唤醒测试后无异常')
+          .fontColor(Color.White)
+          .fontSize('18fp')
+
+        Blank()
+
+        Row() {
+          Text('总测试次数：')
+            .fontSize(40)
+            .fontColor(Color.White)
+
+          Text(this.reboot_times.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text('当前测试次数：')
+            .fontSize(40)
+            .fontColor(Color.White)
+
+          Text(this.current_times.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text('倒计时：')
+            .fontSize(40)
+            .fontColor(Color.White)
+
+          Text(this.timeLeft.toString())
+            .fontSize(50)
+            .fontColor(Color.Red)
+        }
+        Blank()
+
+        Row() {
+          Text(this.info)
+            .fontSize(60)
+            .fontColor(this.Vue? Color.Green:Color.Red)
+        }
+        Blank()
+
+        Button('开始测试')
+          .width('40%')
+          .height('60vp')
+          .onClick(() => {
+            this.startSuspend();
+            //this.Vue = true;
+          })
+
+        Blank()
+
+        Button('结束测试')
+          .width('40%')
+          .height('60vp')
+          .onClick(() => {
+            this.info = '你停止了测试！！'
+            systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
+            clearInterval(this.intervalId);
+            //this.Vue = true;
+          })
+
+        Blank()
+      }
+      .width('100%')
+      .height('70%')
+
+      CustomContainer({
+        title: this.name,
+        Url: 'pages/Aging/Aging_index',
+        StepTips: this.StepTips,
+        FillColor: $FillColor,
+        name: $name,
+        Vue: $Vue,
+        isFlash: $isSensor
+      })
+        .height('10%')
+        .width('100%')
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor(Color.Black)
+  }
+
+  onBackPress() {
+    router.replaceUrl({
+      url: 'pages/Aging/Aging_index'
+    })
+  }
+}
