@@ -141,7 +141,7 @@ struct IndexPage {
   @State name: string = 'Player';
   @State Vue: boolean = false;
   @State Url: string = '';
-
+  @State isLocked: boolean = false; // 控制锁屏状态的变量
   async aboutToAppear() {
     FactorytestData.loadConfigs();
     console.error('bububu get =' + FactorytestData.getConfig().first_menu);
@@ -313,149 +313,173 @@ struct IndexPage {
   }
 
   build() {
-    Column() {
-      Row() {
-        Image($r('app.media.spacemit_logo'))
-          .width('40vp')
-          .height('40vp')
-        Text('进迭工程测试')
-          .fontColor(Color.White)
-          .fontSize('22fp')
+    Stack() {
+      Column() {
         Row() {
-          Button() {
-            Image($r('app.media.ic_public_delete'))
-              .width('30vp')
-              .height('30vp')
-          }.backgroundColor(Color.Black)
-          .onClick(() => {
-            AlertDialog.show(
-              {
-                message: "是否删除所有记录",
-                primaryButton: {
-                  value: 'Yes',
-                  action: () => {
-                    this.ClearText();
+          Image($r('app.media.spacemit_logo'))
+            .width('40vp')
+            .height('40vp')
+          Text('进迭工程测试')
+            .fontColor(Color.White)
+            .fontSize('22fp')
+          Row() {
+            Button() {
+              Image($r('app.media.ic_public_delete'))
+                .width('30vp')
+                .height('30vp')
+            }.backgroundColor(Color.Black)
+            .onClick(() => {
+              AlertDialog.show(
+                {
+                  message: "是否删除所有记录",
+                  primaryButton: {
+                    value: 'Yes',
+                    action: () => {
+                      this.ClearText();
+                      promptAction.showToast({
+                        message: '结果已删除', duration: 1000
+                      });
+                    }
+                  },
+                  secondaryButton: {
+                    value: 'No',
+                    action: () => {
+
+                    }
+                  },
+                  cancel: () => {
+
+                  }
+                }
+              )
+            })
+
+            Button() {
+              Image($r('app.media.ic_public_save'))
+                .width('30vp')
+                .height('30vp')
+                .margin({ left: 30 })
+            }.backgroundColor(Color.Black)
+            .onClick(() => {
+              this.isLocked = true;
+
+              // 延时一点点执行
+              setTimeout(() => {
+                this.SaveXml();
+                this.isLocked = false;
+                AlertDialog.show({
+                  message: "报告已生成，请将设备连接pc，通过run.bat确认测试已结束，获取可视化报告",
+                  confirm: {
+                    value: 'OK',
+                    action: () => {
+                      promptAction.showToast({
+                        message: '总报告已生成', duration: 1000
+                      })
+                    }
+                  },
+                  cancel: () => {
                     promptAction.showToast({
-                      message: '结果已删除', duration: 1000
+                      message: '总报告已生成', duration: 1000
                     });
                   }
-                },
-                secondaryButton: {
-                  value: 'No',
-                  action: () => {
+                })
+              }, 50);
+            })
 
-                  }
-                },
-                cancel: () => {
+          }
+        }.width('100%').justifyContent(FlexAlign.SpaceAround).margin({ top: '15vp' }).height('6%')
 
+        Blank().height(40)
+        Line()
+          .width('100%')
+          .height(3)
+          .backgroundColor('#FFFFFF')
+
+        List({}) {
+          ForEach(this.TestCaseList, (item: TestCase, index: number) => {
+            if (FactorytestData.getConfig().first_menu.includes(index)) {
+              ListItem() {
+                Row() {
+                  Text(item.title_ch).fontSize(20).fontColor(Color.White)
                 }
-              }
-            )
-          })
-
-          Button() {
-            Image($r('app.media.ic_public_save'))
-              .width('30vp')
-              .height('30vp')
-              .margin({ left: 30 })
-          }.backgroundColor(Color.Black)
-          .onClick(() => {
-            this.SaveXml();
-            AlertDialog.show({
-              message: "报告已生成，请将设备连接pc，通过run.bat确认测试已结束，获取可视化报告",
-              confirm: {
-                value: 'OK',
-                action: () => {
-                  promptAction.showToast({
-                    message: '总报告已生成', duration: 1000
+                .width('100%')
+                .height(50)
+                .alignItems(VerticalAlign.Center)
+                .linearGradient({ angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
+                .onClick(() => {
+                  this.count = 1;
+                  this.current = index;
+                  router.pushUrl({
+                    url: item.uri,
                   })
+                  let dateTimeUtil = new DateTimeUtil();
+                  let time =
+                    `${dateTimeUtil.getFullYear()}-${dateTimeUtil.getMonth()}-${dateTimeUtil.getDay()} ${dateTimeUtil.getHour()}:${dateTimeUtil.getMinute()}:${dateTimeUtil.getSecond()}`;
+                  let TimePath = path + "/Time.txt";
+                  let OP = fs.openSync(TimePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+                  let buf = new ArrayBuffer(4096);
+                  fs.readSync(OP.fd, buf);
+                  let Log = (time + ";").toString();
+                  fs.writeSync(OP.fd, Log);
+                })
+              }
+            }
+          }, (item: TestCase) => item.title)
+        }.width('100%').height('70%').divider({ strokeWidth: 1, color: Color.Grey })
+
+        Blank().height(20)
+
+        Button('全部测试完成后，恢复出厂设置')
+          .width('400vp')
+          .height('60vp')
+          .backgroundColor(Color.Red)
+          .onClick(() => {
+            AlertDialog.show({
+              title: '操作确认',
+              message: '确定执行此操作吗？\n警告：\n执行该操作后，所有测试数据将会被清除',
+              primaryButton: {
+                value: '取消',
+                action: () => {
                 }
               },
-              cancel: () => {
-                promptAction.showToast({
-                  message: '总报告已生成', duration: 1000
-                });
+              secondaryButton: {
+                value: '确认',
+                action: () => {
+                  let restorer = Updater.getRestorer();
+                  if (!restorer) {
+                    console.error('Updater getRestorer failed');
+                  }
+                  try {
+                    restorer.factoryReset()
+                      .then(() => {
+                        console.error('factoryReset success');
+                      })
+                      .catch((err: Error) => {
+                        console.error('factoryReset failed: ' + JSON.stringify(err));
+                      })
+                  } catch (err) {
+                    console.error('Updater factoryReset failed: ' + JSON.stringify(err));
+                  }
+                }
               }
             })
           })
+      }.width('100%').height('100%').backgroundColor(Color.Black)
+      // 半透明遮罩层，当isLocked为true时显示
+      if (this.isLocked) {
+        Column() {
+          //LoadingProgress() // 加载指示器
+          Text('处理中，请稍候...')
+            .fontSize(24)
+            .fontColor(Color.White)
+            .margin({ top: 10 })
         }
-      }.width('100%').justifyContent(FlexAlign.SpaceAround).margin({ top: '15vp' }).height('6%')
-
-      Blank().height(40)
-      Line()
         .width('100%')
-        .height(3)
-        .backgroundColor('#FFFFFF')
-
-      List({}) {
-        ForEach(this.TestCaseList, (item: TestCase, index: number) => {
-          if(FactorytestData.getConfig().first_menu.includes(index)) {
-            ListItem() {
-              Row() {
-                Text(item.title_ch).fontSize(20).fontColor(Color.White)
-              }
-              .width('100%')
-              .height(50)
-              .alignItems(VerticalAlign.Center)
-              .linearGradient({ angle: 90, colors: [[this.ColorTrue[index], 0.0], [this.ColorTrue2[index], 0.618]] })
-              .onClick(() => {
-                this.count = 1;
-                this.current = index;
-                router.pushUrl({
-                  url: item.uri,
-                })
-                let dateTimeUtil = new DateTimeUtil();
-                let time =
-                  `${dateTimeUtil.getFullYear()}-${dateTimeUtil.getMonth()}-${dateTimeUtil.getDay()} ${dateTimeUtil.getHour()}:${dateTimeUtil.getMinute()}:${dateTimeUtil.getSecond()}`;
-                let TimePath = path + "/Time.txt";
-                let OP = fs.openSync(TimePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
-                let buf = new ArrayBuffer(4096);
-                fs.readSync(OP.fd, buf);
-                let Log = (time + ";").toString();
-                fs.writeSync(OP.fd, Log);
-              })
-            }
-          }
-        }, (item: TestCase) => item.title)
-      }.width('100%').height('70%').divider({ strokeWidth: 1, color: Color.Grey })
-
-      Blank().height(20)
-
-      Button('全部测试完成后，恢复出厂设置')
-        .width('400vp')
-        .height('60vp')
-        .backgroundColor(Color.Red)
-        .onClick(() => {
-          AlertDialog.show({
-            title: '操作确认',
-            message: '确定执行此操作吗？\n警告：\n执行该操作后，所有测试数据将会被清除',
-            primaryButton: {
-              value: '取消',
-              action: () => {}
-            },
-            secondaryButton: {
-              value: '确认',
-              action: () => {
-                let restorer = Updater.getRestorer();
-                if (!restorer) {
-                  console.error('Updater getRestorer failed');
-                }
-                try {
-                  restorer.factoryReset()
-                    .then(() => {
-                      console.error('factoryReset success');
-                    })
-                    .catch((err: Error) => {
-                      console.error('factoryReset failed: ' + JSON.stringify(err));
-                    })
-                } catch(err) {
-                  console.error('Updater factoryReset failed: ' + JSON.stringify(err));
-                }
-              }
-            }
-          })
-      })
-    }.width('100%').height('100%').backgroundColor(Color.Black)
+        .height('100%')
+        .backgroundColor(0x99000000) // 半透明黑色背景
+        .justifyContent(FlexAlign.Center)
+      }
+    }.width('100%').height('100%')
   }
 
   ClearText() {
