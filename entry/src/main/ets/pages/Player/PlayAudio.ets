@@ -31,10 +31,18 @@ struct playAudio {
   @State showControls: boolean = true;
   controller: VideoController = new VideoController();
 
+  @State currentTime: number = 0;
+  @State duration: number = 180;
+  @State isPlaying: boolean = true;
   async aboutToAppear() {
     //await FirstDialog.ChooseDialog(this.StepTips, this.name);
   }
 
+  formatTime(seconds: number): string {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  }
   build() {
     Column() {
       Row() {
@@ -74,17 +82,74 @@ struct playAudio {
           .width('100%')
           .height('60%')
           .autoPlay(this.isAutoPlay)
-          .controls(this.showControls)
+          .controls(false)
           .onFinish(() => {
             this.Vue = true;
+            this.isPlaying = false;
+            this.currentTime = 0
+          })
+          .onUpdate((e) => {
+            this.currentTime = e.time;
+          })
+          .onPrepared((e) => {
+            this.duration = e.duration;
           })
       }
       .width('100%')
       .height('78%')
-      .onClick(() => {
-        this.showControls = !this.showControls;
-      })
+      Row() {
+        Button({ type: ButtonType.Circle }) {
+          Image(this.isPlaying ? $r('app.media.icon_play') : $r('app.media.icon_pause'))
+            .width(20)
+            .height(20)
+        }
+        .margin({ left: '20vp' })
+        .width(30)
+        .height(30)
+        .onClick(() => {
+          if (this.isPlaying) {
+            this.controller.pause();
+            this.isPlaying = false;
+          } else {
+            this.controller.start();
+            this.isPlaying = true;
+          }
+        })
 
+        Text(this.formatTime(this.currentTime))
+          .fontSize(14)
+          .width(50)
+          .textAlign(TextAlign.End)
+          .fontColor(Color.White)
+          .padding(5)
+
+        Slider({
+          value: this.currentTime,
+          min: 0,
+          max: this.duration,
+          step: 1,
+          style: SliderStyle.OutSet
+        })
+          .width('78%')
+          .trackColor('#ADD8E6')
+          .selectedColor('#4169E1')
+          .blockColor('#191970')
+          .blockBorderColor('#FF0000')
+          .trackThickness(4)
+          .showTips(true)
+          .onChange((value: number) => {
+            this.currentTime = value;
+            this.controller.setCurrentTime(value);
+          })
+
+        Text(this.formatTime(this.duration))
+          .fontSize(14)
+          .width(50)
+          .textAlign(TextAlign.End)
+          .fontColor(Color.White)
+      }
+      .width('100%')
+      .margin({ bottom: 20 })
       CustomContainer({
         title: this.name,
         Url: 'pages/Player/PlayAudioList',
