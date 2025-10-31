@@ -55,6 +55,7 @@ struct IndexPage {
     { title: 'Brightness', title_ch: '屏幕亮度测试', uri: 'pages/Screen/Brightness' },
     { title: 'ScreenPick', title_ch: '屏幕拉起测试', uri: 'pages/Screen/ScreenPick' },
     { title: 'TouchMove', title_ch: '屏幕触摸测试', uri: 'pages/Screen/TouchMoveTest' },
+    { title: 'TouchFill', title_ch: '屏幕完整性测试', uri: 'pages/Screen/TouchFillTest' },
     { title: 'ElectromagneticTouch', title_ch: '电磁触控测试', uri: 'pages/Screen/ElectromagneticTouch' },
   ]
   @State ColorObject: Object[] = letColor;

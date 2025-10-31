@@ -43,7 +43,7 @@ export class FactorytestData {
     Camera_menu: [0],
     Player_menu: [0,1],
     Sensor_menu: [0,1,3,4,5,12],
-    Screen_menu: [1,3],
+    Screen_menu: [1,3,4],
     MultimodalInput_menu: [0,1,2],
     Power_menu: [0,1],
     Wifi_menu: [0],
