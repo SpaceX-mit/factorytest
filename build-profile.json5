@@ -19,12 +19,12 @@
         "name": "default",
         "material": {
           "storePassword": "0000001AA6D9AE38348B56D61DCE5BFE4E1566F0C7D25B0F74F93AA96E7204D5CC6DC426CFEAA7FA855F",
-          "certpath": "D:/HAP_CODE/factorytest/signature/app-release.cer",
+          "certpath": "D:/work_OHAPP/AIBOOK/factorytest/signature/app-release.cer",
           "keyAlias": "ohos-app",
           "keyPassword": "0000001A89BAAEED5477014FCEE8BB51B950357A69A3E66392336EF703C0EC3C11F314E92D7CD8320D1B",
-          "profile": "D:/HAP_CODE/factorytest/signature/app-release-profile.p7b",
+          "profile": "D:/work_OHAPP/AIBOOK/factorytest/signature/app-release-profile.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "D:/HAP_CODE/factorytest/signature/app.p12"
+          "storeFile": "D:/work_OHAPP/AIBOOK/factorytest/signature/app.p12"
         }
       }
     ],
