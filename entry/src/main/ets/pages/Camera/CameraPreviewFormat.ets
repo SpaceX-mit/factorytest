@@ -198,7 +198,7 @@ struct cameraFormat {
                   Logger.info(this.tag, `onLoad surfaceId: ${this.surfaceId}`)
                   //this.cameraInit()
                 })
-                .size({ width: '100%', height: '70%' })
+                .size({ width: '45%', height: '70%' })
               Text('预览').fontSize('20fp').fontColor(Color.White)
             }.size({ width: '80%' })
             Column() {
