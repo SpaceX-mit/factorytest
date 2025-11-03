@@ -43,6 +43,10 @@
     {
       "name": "permission_reason",
       "value": "some reasons"
+    },
+    {
+      "name": "btn_move",
+      "value": "移动"
     }
   ]
 }

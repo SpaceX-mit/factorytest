@@ -2,6 +2,8 @@
 import { display } from '@kit.ArkUI';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import window from '@ohos.window';
+import common from '@ohos.app.ability.common';
 @Entry
 @Component
 struct TouchFillTest {
@@ -9,7 +11,7 @@ struct TouchFillTest {
   private ctx: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
   // 方格参数
-  private gridSize: number = 80;//76;
+  private gridSize: number = 80;
   private gridColor: string = '#ffff00';
   private arrayIndex: number = 0;
   private timerId: number = -1;
@@ -19,14 +21,24 @@ struct TouchFillTest {
   @State  Vue: boolean = false;
   private Url: string = 'pages/Screen/Screen_index';
   @State private name: string = 'TouchFillBox';
+  @State private yPosArray: Array<string> = ['30%', '60%', '90%'];
+  @State private yPosArrayIndex: number = 2;
+  context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+  async setSystemBar() {
+    let windowClass = await window.getLastWindow(this.context);
+    //设置导航栏，状态栏不可见
+    await windowClass.setWindowSystemBarEnable([]);
+  }
+
   aboutToAppear() {
     //this.startIntervalTimer();
+    this.setSystemBar();
     let currentOrientation: display.Orientation = display.getDefaultDisplaySync().orientation;
     console.log(`ohtest 当前屏幕方向: ${currentOrientation}`); //0 2竖屏 ，13横屏
     if (currentOrientation === 0 || currentOrientation === 2) {
       this.gridSize = 80;
     }else
-      this.gridSize = 76;
+      this.gridSize = 60;
   }
 
   @Builder
@@ -37,7 +49,7 @@ struct TouchFillTest {
           .width('20vp')
           .height('20vp')
       }
-      .width('30%')
+      .width('22%')
       .height('60vp')
       .backgroundColor(Color.Grey)
       .opacity(0.4)
@@ -51,7 +63,7 @@ struct TouchFillTest {
           .width('20vp')
           .height('20vp')
       }
-      .width('30%')
+      .width('22%')
       .height('60vp')
       .backgroundColor(Color.Grey)
       .onClick(() => {
@@ -75,7 +87,7 @@ struct TouchFillTest {
         .width('20vp')
         .height('20vp')
     }
-    .width('30%')
+    .width('22%')
     .height('60vp')
     .backgroundColor(Color.Grey)
     .onClick(() => {
@@ -94,14 +106,9 @@ struct TouchFillTest {
 
   build() {
     Column() {
-      // Text('拖动填充方格区域')
-      //   .fontSize(32)
-      //   .fontColor('#333')
-      //   .margin(10)
-
       Canvas(this.ctx)
         .width('100%')
-        .height('78%')
+        .height('100%')
         .backgroundColor('#ffffff')
         .onReady(() => {
           this.drawGrid();
@@ -132,17 +139,17 @@ struct TouchFillTest {
       //   .fontColor('#666')
       //   .margin(5)
 
-      Button('重新开始')
-        .width('60%')
-        .backgroundColor('#ff4444')
-        .fontColor('#ffffff')
-        .margin(10)
-        .onClick(() => {
-          this.stopIntervalTimer();
-          this.filledCells.clear();
-          this.drawGrid();
-        })
-      Blank()
+      // Button('重新开始')
+      //   .width('60%')
+      //   .backgroundColor('#ff4444')
+      //   .fontColor('#ffffff')
+      //   .margin(10)
+      //   .onClick(() => {
+      //     this.stopIntervalTimer();
+      //     this.filledCells.clear();
+      //     this.drawGrid();
+      //   })
+      // Blank()
       Row() {
         this.PassBtn($r('app.string.btn_fullscreen'), true);
         Button() {
@@ -150,7 +157,7 @@ struct TouchFillTest {
             .width('20vp')
             .height('20vp')
         }
-        .width('30%')
+        .width('22%')
         .height('60vp')
         .backgroundColor(Color.Grey)
         .onClick(() => {
@@ -168,15 +175,27 @@ struct TouchFillTest {
         })
 
         this.FailBtn($r('app.string.btn_fullscreen'), true);
+
+        Button($r('app.string.btn_move'))
+        .width('22%')
+        .height('60vp')
+        .backgroundColor(Color.Grey)
+        .onClick(() => {
+          if (this.yPosArrayIndex === 3) {
+            this.yPosArrayIndex = 0;
+          }
+          this.yPosArrayIndex++;
+
+        })
       }
       .width('100%')
+      .position({ x: '0%', y: this.yPosArray[this.yPosArrayIndex % 3]})
       .justifyContent(FlexAlign.SpaceEvenly)
-      .backgroundColor(Color.Black)
+      .backgroundColor(Color.White);
 
     }
     .width('100%')
     .height('100%')
-    //.backgroundColor('#f8f8f8')
     .backgroundColor(Color.Black)
   }
 
@@ -249,6 +268,9 @@ struct TouchFillTest {
     // 每隔0.5秒执行一次
     if (this.timerId == -1) {
       this.timerId = setInterval(() => {
+        if (this.arrayIndex === 5) {
+          this.arrayIndex = 0;
+        }
         this.arrayIndex++;
         //  绘制所有已填充的格子
         this.ctx.fillStyle = this.fillColor[this.arrayIndex % 5];
