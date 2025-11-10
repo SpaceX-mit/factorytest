@@ -81,6 +81,7 @@ struct playAudio {
         })
           .width('100%')
           .height('60%')
+          .backgroundColor(Color.Black)
           .autoPlay(this.isAutoPlay)
           .controls(false)
           .onFinish(() => {
@@ -96,7 +97,7 @@ struct playAudio {
           })
       }
       .width('100%')
-      .height('78%')
+      .height('68%')
       Row() {
         Button({ type: ButtonType.Circle }) {
           Image(this.isPlaying ? $r('app.media.icon_play') : $r('app.media.icon_pause'))
@@ -130,7 +131,7 @@ struct playAudio {
           step: 1,
           style: SliderStyle.OutSet
         })
-          .width('78%')
+          .width('80%')
           .trackColor('#ADD8E6')
           .selectedColor('#4169E1')
           .blockColor('#191970')
