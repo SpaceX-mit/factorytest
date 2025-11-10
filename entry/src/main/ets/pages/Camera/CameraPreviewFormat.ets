@@ -20,6 +20,7 @@ import { CustomContainer } from '../common/CameraPreviewFormatContainer';
 import FirstDialog from '../model/FirstDialog';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import { DisplayData } from '../../utils/DisplayData';
 
 class Obj {
   format: number = 0;
@@ -35,6 +36,10 @@ interface ResolutionItem {
   value: string;
 }
 
+interface ComponentSize {
+  width: string;
+  height: string;
+}
 @Entry
 @Component
 struct cameraFormat {
@@ -54,8 +59,22 @@ struct cameraFormat {
   @State resolutionSelectVal: string = '';
   @State nextEnabled: boolean = true;
   @State formatVal: SelectOption[] = [];
-
+  @State orientation: number = 0; // 存储屏幕方向
+  @State componentSize: ComponentSize = { width: '100%', height: '70%' }; // 默认大小
+  @State btnWidth: string = '';
+  @State btnHeight: string = '';
+  @State imgSize: string = '';
   async aboutToAppear() {
+    this.orientation = DisplayData.parseBuildInDefaultOrientation();
+    if(this.orientation == 2) {
+      this.btnWidth = '30%';
+      this.btnHeight = '40%';
+      this.imgSize = '10vp'
+    } else {
+      this.btnWidth = '30%';
+      this.btnHeight = '40%';
+      this.imgSize = '20vp'
+    }
     //await FirstDialog.ChooseDialog(this.StepTips, this.name);
     Logger.info(this.tag, `the resolution: ${this.resolution}`)
   }
@@ -87,24 +106,51 @@ struct cameraFormat {
   onPageShow() {
     Logger.info(this.tag, `takePicture end, assetUri`)
     this.surfaceId = Number(this.mXComponentController.getXComponentSurfaceId());
-    CameraService.initCamera(this.surfaceId, this.cameraDeviceIndex).then(() => {
-      this.cameraListFn()
-    })
+    // CameraService.initCamera(this.surfaceId, this.cameraDeviceIndex).then(() => {
+    //   this.cameraListFn()
+    // })
   }
 
+  // nextClickFn() {
+  //   // 切换next 次数增加 分辨率遍历 分辨率遍历完 切换摄像头 再次遍历分辨率 调取初始化相机进行改变
+  //   this.clickFrequency++
+  //   if (this.clickFrequency === this.testingFrequency) {
+  //     this.Vue = true
+  //     this.nextEnabled = false
+  //     return
+  //   }
+  //   let newResolution = this.dealWithResolutionFn(this.resolution)
+  //   Logger.info(this.tag, `nextClickFn new Resolution: ${newResolution}`)
+  //   this.cameraInit(newResolution[this.clickFrequency])
+  //   this.resolutionSelectVal = String(this.resolution[this.clickFrequency].value)
+  //
+  // }
   nextClickFn() {
-    // 切换next 次数增加 分辨率遍历 分辨率遍历完 切换摄像头 再次遍历分辨率 调取初始化相机进行改变
-    this.clickFrequency++
-    if (this.clickFrequency === this.testingFrequency) {
-      this.Vue = true
-      this.nextEnabled = false
-      return
-    }
-    let newResolution = this.dealWithResolutionFn(this.resolution)
-    Logger.info(this.tag, `nextClickFn new Resolution: ${newResolution}`)
-    this.cameraInit(newResolution[this.clickFrequency])
-    this.resolutionSelectVal = String(this.resolution[this.clickFrequency].value)
+    this.clickFrequency++;
+    // 当前相机的所有分辨率都测试完
+    if (this.clickFrequency >= this.testingFrequency) {
+      this.clickFrequency = 0;
 
+      this.cameraDeviceIndex++;
+
+      if (this.cameraDeviceIndex >= this.cameraListLength) {
+        this.Vue = true
+        this.nextEnabled = false
+        Logger.info(this.tag, `All cameras tested`);
+        return;
+      }
+
+      Logger.info(this.tag, `Switching to next camera: ${this.cameraDeviceIndex}`);
+      this.cameraInit();
+      return;
+    }
+
+    // 切换下一个分辨率
+    let newResolution = this.dealWithResolutionFn(this.resolution);
+    let targetRes = newResolution[this.clickFrequency];
+    Logger.info(this.tag, `nextClickFn -> set new resolution: ${targetRes.size.width}x${targetRes.size.height}`);
+    this.cameraInit(targetRes);
+    this.resolutionSelectVal = String(this.resolution[this.clickFrequency].value);
   }
 
   // 对分辨率数据处理 获取到需要的格式
@@ -155,7 +201,7 @@ struct cameraFormat {
           .visibility(Visibility.Hidden)
       }
       .backgroundColor(Color.Black)
-      .height('10%')
+      .height('5%')
       .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
 
@@ -164,7 +210,7 @@ struct cameraFormat {
         .width('100%')
         .height(3)
         .backgroundColor('#FFFFFF')
-      Blank().height(20)
+      Blank().height(10)
 
       Scroll() {
         Column() {
@@ -187,19 +233,22 @@ struct cameraFormat {
             }
             Flex({ alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceAround, direction: FlexDirection.Column }) {
             Column() {
+
               XComponent({
                 id: 'componentId',
                 type: 'surface',
                 controller: this.mXComponentController
               })
                 .onLoad(async () => {
+                  this.componentSize = this.orientation === 2 ? { width: '45%', height: '70%' } : { width: '100%', height: '70%' };
                   Logger.info(this.tag, 'onLoad is called')
                   this.surfaceId = Number(this.mXComponentController.getXComponentSurfaceId());
                   Logger.info(this.tag, `onLoad surfaceId: ${this.surfaceId}`)
-                  //this.cameraInit()
+                  this.cameraInit()
                 })
-                .size({ width: '100%', height: '70%' })
-              Text('预览').fontSize('20fp').fontColor(Color.White)
+                .size(this.componentSize)
+                .backgroundColor(Color.Black)
+              Text('预览').fontSize('15fp').fontColor(Color.White)
             }.size({ width: '80%' })
             Column() {
               Row() {
@@ -241,7 +290,8 @@ struct cameraFormat {
                     this.cameraInit()
                   })
                   .backgroundColor(Color.Black)
-              }.size({ width: '100%', height: '30%' }).justifyContent(FlexAlign.SpaceEvenly)
+              }.size({ width: '100%', height: '35%' }).justifyContent(FlexAlign.SpaceEvenly)
+              .margin({ bottom: '10vp' })
 
               Row() {
                 Select([{ value: 'YUV' }])
@@ -266,10 +316,10 @@ struct cameraFormat {
                   .onClick(async () => {
                     this.nextClickFn()
                   })
-              }.size({ width: '100%', height: '30%' }).justifyContent(FlexAlign.SpaceEvenly)
+              }.size({ width: '100%', height: '25%' }).justifyContent(FlexAlign.SpaceEvenly)
             }.size({ width: '100%', height: '20%' })
           }
-        }.height('70%').width('100%')
+        }.height('75%').width('100%')
       }.scrollBarColor(Color.White) // 滚动条颜色
       .scrollBarWidth(10)
 
@@ -280,9 +330,13 @@ struct cameraFormat {
         FillColor: $FillColor,
         name: $name,
         Vue: $Vue,
+        btnWidth: this.btnWidth,
+        btnHeight: this.btnHeight,
+        imgSize: this.imgSize,
       })
-        .height('14%')
+        .height('16%')
         .width('100%')
+        .margin({ top: '10vp' }) // 下移位置
     }
     .width('100%')
     .height('100%')

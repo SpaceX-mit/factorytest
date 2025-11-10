@@ -20,6 +20,7 @@ import fs from '@ohos.file.fs';
 import util from '@ohos.util';
 import data_preferences from '@ohos.data.preferences';
 import { FactorytestData } from '../../utils/FactorytestData';
+import { DisplayData } from '../../utils/DisplayData';
 
 const TAG: string = 'ParseXML';
 let path: string = globalThis.dir;
@@ -55,7 +56,7 @@ struct IndexPage {
   @State ColorObject: Object[] = letColor;
   @State ColorTrue: number[] = [];
   @State ColorTrue2: number[] = [];
-
+  @State orientation: number = 0;
   async aboutToAppear() {
     FactorytestData.loadConfigs();
     console.error('bububu get =' + FactorytestData.getConfig().Camera_menu);
@@ -307,6 +308,11 @@ struct IndexPage {
       Row() {
         Blank()
         Button() {
+          // if(DisplayData.parseBuildInDefaultOrientation() == 0) {
+          //   Image($r('app.media.ic_public_pass')).width('20vp').height('20vp')
+          // } else {
+          //   Image($r('app.media.ic_public_pass')).width('10vp').height('10vp')
+          // }
           Image($r('app.media.ic_public_pass')).width('20vp').height('20vp')
         }
         .width('40%')

@@ -18,6 +18,7 @@ import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 import Logger from '../model/Logger';
 import { BusinessError } from '@ohos.base';
+import { DisplayData } from '../../utils/DisplayData';
 
 @Component
 export struct CustomContainer {
@@ -27,17 +28,20 @@ export struct CustomContainer {
   Url: string = '';
   title: string = '';
   StepTips: string = '';
+  btnWidth: string = '';
+  btnHeight: string = '';
+  imgSize: string = '';
 
   @Builder
   PassBtn(text: Resource, isFullScreen: boolean) {
     if (this.Vue == false) {
       Button({ stateEffect: this.Vue }) {
         Image($r('app.media.ic_public_pass'))
-          .width('20vp')
-          .height('20vp')
+          .width(this.imgSize)
+          .height(this.imgSize)
       }
-      .width('30%')
-      .height('60vp')
+      .width(this.btnWidth)
+      .height(this.btnHeight)
       .backgroundColor(Color.Grey)
       .opacity(0.4)
       .onClick(() => {
@@ -47,11 +51,11 @@ export struct CustomContainer {
     else {
       Button({ stateEffect: this.Vue }) {
         Image($r('app.media.ic_public_pass'))
-          .width('20vp')
-          .height('20vp')
+          .width(this.imgSize)
+          .height(this.imgSize)
       }
-      .width('30%')
-      .height('60vp')
+      .width(this.btnWidth)
+      .height(this.btnHeight)
       .backgroundColor(Color.Grey)
       .onClick(() => {
         router.back({
@@ -69,13 +73,14 @@ export struct CustomContainer {
 
   @Builder
   FailBtn(text: Resource, isFullScreen: boolean) {
+
     Button() {
       Image($r('app.media.ic_public_fail'))
-        .width('20vp')
-        .height('20vp')
+        .width(this.imgSize)
+        .height(this.imgSize)
     }
-    .width('30%')
-    .height('60vp')
+    .width(this.btnWidth)
+    .height(this.btnHeight)
     .backgroundColor(Color.Grey)
     .onClick(() => {
       router.back({
@@ -98,11 +103,11 @@ export struct CustomContainer {
         this.PassBtn($r('app.string.btn_fullscreen'), true);
         Button() {
           Image($r('app.media.ic_public_help'))
-            .width('20vp')
-            .height('20vp')
+            .width(this.imgSize)
+            .height(this.imgSize)
         }
-        .width('30%')
-        .height('60vp')
+        .width(this.btnWidth)
+        .height(this.btnHeight)
         .backgroundColor(Color.Grey)
         .onClick(() => {
           AlertDialog.show(
