@@ -34,9 +34,11 @@ struct Proximity {
   @State isHave: boolean = true;
   @State sensorChange: boolean = false;
   @State dataPedometer: string = '';
+  @State dataPedometerAls: string = '';
   @State nextPedometer: string = '';
+  @State nextPedometerAls: string = '';
   @State intervalNum: number = 0;
-
+  @State intervalNumAls: number = 0;
   async aboutToAppear() {
     //await FirstDialog.ChooseDialog(this.StepTips, this.name)
   }
@@ -48,7 +50,7 @@ struct Proximity {
       Logger.info(TAG, 'enter')
       try {
         sensor.on(sensor.SensorId.PROXIMITY, (data: sensor.ProximityResponse) => {
-          console.info('Succeeded in invoking on. Proximity: ' + data.distance);
+          console.info('Succeeded in invoking on. Proximity: ' + data.distance + 'Als:' + data.timestamp);
           this.dataPedometer = data.distance.toFixed(2);
           this.intervalNum = setInterval(() => {
             this.nextPedometer = data.distance.toFixed(2);
@@ -56,10 +58,17 @@ struct Proximity {
               this.Vue = true;
             }
           }, 100)
+          this.dataPedometerAls = data.timestamp.toFixed(2);
+          this.intervalNumAls = setInterval(() => {
+            this.nextPedometerAls = data.timestamp.toFixed(2);
+            if (this.nextPedometerAls !== this.dataPedometerAls) {
+              this.Vue = true;
+            }
+          }, 100)
         }, { interval: 100000000 });
-        setTimeout(() => {
-          sensor.off(sensor.SensorId.PROXIMITY);
-        }, 5000);
+        // setTimeout(() => {
+        //   sensor.off(sensor.SensorId.PROXIMITY);
+        // }, 5000);
       } catch (error) {
         let e: BusinessError.BusinessError = error as BusinessError.BusinessError;
         if (e) {
@@ -212,10 +221,17 @@ struct Proximity {
           .fontSize('18fp')
           .textAlign(TextAlign.Start)
           .width('100%')
-          .margin({ bottom: 24 })
+          .margin({ bottom: 12 })
+        Text('光强数据: ' + this.dataPedometerAls)
+          .fontColor(Color.White)
+          .fontSize('18fp')
+          .textAlign(TextAlign.Start)
+          .width('100%')
+          .margin({ bottom: 12 })
       }
       .width('80%')
       .height('30%')
+
 
       Flex({ alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start, direction: FlexDirection.Column }) {
         Scroll() {
