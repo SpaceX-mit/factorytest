@@ -20,7 +20,7 @@ struct TouchFillTest {
   @State StepTips: string = '操作步骤：手指触摸屏幕并滑动' + '\n' + '预期结果：在手指触摸过的方格区域被填充成红蓝绿白灰五种颜色交替显示0.5秒';
   @State  Vue: boolean = false;
   private Url: string = 'pages/Screen/Screen_index';
-  @State private name: string = 'TouchFillBox';
+  @State private name: string = 'TouchFill';
   @State private yPosArray: Array<string> = ['30%', '60%', '90%'];
   @State private yPosArrayIndex: number = 2;
   context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
