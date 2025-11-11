@@ -170,7 +170,7 @@ struct playVideo {
       .interval(2000)
       .indicator(false)
       .width('80%')
-      .height('38%')
+      .height('34%')
 
       Blank().height(20)
 

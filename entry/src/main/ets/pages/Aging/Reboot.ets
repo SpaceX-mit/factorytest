@@ -164,42 +164,46 @@ struct Reboot {
             .fontColor(this.Vue? Color.Green:Color.Red)
         }
         Blank()
-
-        Button('开始测试')
-          .width('40%')
-          .height('60vp')
-          .onClick(() => {
-            try {
-              this.info = '测试中 ... 勿动 ！！！'
-              this.current_times = 0
-              this.Vue = false
-              systemParameter.setSync('persist.factorytest.reboottest.enabled', '1');
-              if(systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
-                this.intervalId = setInterval(() => {
-                  if (this.timeLeft > 0) {
-                    this.timeLeft--
-                  } else {
-                    power.rebootDevice("reboot_reason");
-                  }
-                }, 1000)
+        Row({ space: 15 }) {
+          Button('开始测试')
+            .width('40%')
+            .height('50vp')
+            .onClick(() => {
+              try {
+                this.info = '测试中 ... 勿动 ！！！'
+                this.current_times = 0
+                this.Vue = false
+                systemParameter.setSync('persist.factorytest.reboottest.enabled', '1');
+                if (systemParameter.getSync('persist.factorytest.reboottest.enabled', '0') === '1') {
+                  this.intervalId = setInterval(() => {
+                    if (this.timeLeft > 0) {
+                      this.timeLeft--
+                    } else {
+                      power.rebootDevice("reboot_reason");
+                    }
+                  }, 1000)
+                }
+              } catch (err) {
+                console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh error 2');
               }
-            } catch (err) {
-              console.error('xxxxxxxxxxxxxxxx ohohohohohohohohohohoh error 2');
-            }
-            //this.Vue = true;
-          })
+              //this.Vue = true;
+            })
 
-        Blank()
 
-        Button('结束测试')
-          .width('40%')
-          .height('60vp')
-          .onClick(() => {
-            this.info = '你停止了测试！！'
-            systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
-            clearInterval(this.intervalId);
-            //this.Vue = true;
-          })
+          Button('结束测试')
+            .width('40%')
+            .height('50vp')
+            .onClick(() => {
+              this.info = '你停止了测试！！'
+              systemParameter.setSync('persist.factorytest.reboottest.enabled', '0');
+              clearInterval(this.intervalId);
+              //this.Vue = true;
+            })
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.Center)
+        .height(50)
+        .padding(10)
 
         Blank()
       }
