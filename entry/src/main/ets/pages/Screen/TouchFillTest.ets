@@ -30,6 +30,11 @@ struct TouchFillTest {
     await windowClass.setWindowSystemBarEnable([]);
   }
 
+  async showSystemUI() {
+    let windowClass = await window.getLastWindow(this.context);
+    await windowClass.setWindowSystemBarEnable(['status', 'navigation']);
+  }
+
   aboutToAppear() {
     //this.startIntervalTimer();
     this.setSystemBar();
@@ -39,6 +44,11 @@ struct TouchFillTest {
       this.gridSize = 80;
     }else
       this.gridSize = 60;
+  }
+
+  aboutToDisappear() {
+    console.log('页面即将消失');
+    this.showSystemUI();
   }
 
   @Builder
